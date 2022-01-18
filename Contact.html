@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<STYLE>A {text-decoration: none;} </STYLE>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <style>
+    @font-face {
+      font-family: workSansBold;
+      src: url(./fonts/WorkSans-Bold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansExtraBold;
+      src: url(./fonts/WorkSans-ExtraBold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansMedium;
+      src: url(./fonts/WorkSans-Medium.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansRegular;
+      src: url(./fonts/WorkSans-Regular.ttf);
+    }
+
+    .topnav {
+      overflow: hidden;
+      position: fixed;
+      right: 18px;
+      top:0px;
+      z-index: 200;
+    }
+
+    .topnav a {
+      float: left;
+      color: #6e6e6e;
+      text-align: center;
+      padding: 16px 18px;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: 'workSansRegular';
+    }
+
+    .topnav a:hover {
+      color: rgb(65, 102, 202);
+    }
+
+    .topnav a.active {
+      color: rgb(59, 78, 163);
+      font-weight: bold;
+    }
+
+    h1 {
+      position: relative;
+      top:80px;
+      color: rgb(255, 255, 255);
+      font-family: 'workSansRegular';
+      font-size: 20px;
+      width: 70%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom:40px ;
+    }
+
+    h2 {
+      top:60px;
+      position: relative;
+      color: #268bff;
+      font-family: 'workSansBold';
+      font-size: 38px;
+      text-align: center;
+    }
+
+    h3{
+      position: relative;
+      color: rgb(255, 255, 255);
+      font-family: 'workSansRegular';
+      font-size: 16px;
+      margin: auto;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    h5 {
+      color: rgb(0, 0, 0);
+      font-family: 'workSansBold';
+      font-size: 18px;
+      left: 50px;
+      position: relative;
+      bottom: 5px;
+      line-height: 0;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color:#202020;
+      padding-bottom: 40px;
+    }
+
+    #header{
+      position:fixed;
+      background-color: white;
+      height: 50px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      fill: black;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .logo {
+      position: absolute;
+      padding: 5px;
+      max-height: 40px;
+      float: left;
+      width: 33.4px;
+      height: 48.3px;
+    }
+
+    .charts{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+    .chart1{
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      top:30px;
+    }
+
+    .chart2{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+
+    .container{
+      width: 50%;
+      right: 0px;
+      position: absolute;
+      top: 5%;
+    }
+
+    .bio{
+      width: 50%;
+      height: auto;
+      position:absolute;
+      bottom: 10px;
+      top:50px;
+      left: 0;
+    }
+    .icon{
+      width: 4%;
+      height: auto;
+      position:relative;
+      left:48%;
+      top:80px;
+      position: relative;
+    }
+
+    #button1{
+      background-color: coral;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      border: none;
+      border-radius: 30px;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+      margin-top:140px;
+    }
+    #button1:hover{
+      background-color: rgb(252, 108, 56);
+    }
+  </style>
+</head>
+
+<body>
+  <div id='header'>
+    <img class="logo" src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
+    <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
+  </div>
+  <!-- Nav bar -->
+  <div class="topnav">
+    <a href="Landing.html">Cities</a>
+    <a href="SimulationResults.html">Simulation Results</a>
+    <a href="GHGEmissionsAnalysis.html">GHG Emissions Analysis</a>
+    <a href="ElectricityCostEstimation.html">Electricity Cost Estimation</a>
+    <a href="About.html">About</a>
+    <a class="active" href="#a">Contact</a>
+  </div>
+  <img class="bio" src="./images/Contact image.jpeg" alt="CUTRIC contact">
+
+
+  <div class="container">
+    <img class="icon" src="./images/Contact Us Icon.png" alt="CUTRIC Icon">
+
+    <h2>Contact Us</h2>
+<h1>
+  CUTRIC’s work generates solutions that decrease fuel consumption, reduce emissions, reduce congestion, and improve the quality of life for mobility customers and transit riders.
+
+</h1>
+    <h1>
+      Toronto Office & Mailing Address
+      </p>1 Yonge St #1801
+      </p>Toronto, ON
+      </p>M5E 1W7
+    </h1>
+    <button id="button1"><a href="mailto:info@cutric-crituc.org"><h3>Email Us</h3></a></button>
+
+  </div>
+
+
+</body>
+
+</html>

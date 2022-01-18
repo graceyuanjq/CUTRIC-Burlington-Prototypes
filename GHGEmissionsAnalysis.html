@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <style>
+    @font-face {
+      font-family: workSansBold;
+      src: url(./fonts/WorkSans-Bold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansExtraBold;
+      src: url(./fonts/WorkSans-ExtraBold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansMedium;
+      src: url(./fonts/WorkSans-Medium.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansRegular;
+      src: url(./fonts/WorkSans-Regular.ttf);
+    }
+
+
+    .topnav {
+      overflow: hidden;
+      position: fixed;
+      right: 18px;
+      top:0px;
+      z-index: 200;
+    }
+
+    .topnav a {
+      float: left;
+      color: #6e6e6e;
+      text-align: center;
+      padding: 16px 18px;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: 'workSansRegular';
+    }
+
+    .topnav a:hover {
+      color: rgb(65, 102, 202);
+    }
+
+    .topnav a.active {
+      color: rgb(59, 78, 163);
+      font-weight: bold;
+    }
+
+    h1 {
+      position: relative;
+      top:80px;
+      color: rgb(255, 255, 255);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 20px;
+      float: left;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      top:60px;
+      position: relative;
+      color: #268bff;
+      font-family: 'workSansBold';
+      font-size: 38px;
+      text-align: center;
+    }
+
+
+    h5 {
+      color: rgb(0, 0, 0);
+      font-family: 'workSansBold';
+      font-size: 18px;
+      left: 50px;
+      position: relative;
+      bottom: 5px;
+      line-height: 0;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color:#202020;
+    }
+
+    #header{
+      position:fixed;
+      background-color: white;
+      height: 50px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      fill: black;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .HeaderLogo {
+      position: absolute;
+      padding: 5px;
+      max-height: 40px;
+      float: left;
+      width: 33.4px;
+      height: 48.3px;
+    }
+
+    .charts{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+    .chart1{
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      top:30px;
+    }
+
+    .chart2{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+
+    .container{
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .legend {
+      position: relative;
+      float: left;
+      width: 500px;
+      top: 100px;
+    }
+    .legend2 {
+      position: relative;
+      float: left;
+      width: 300px;
+      top: 100px;
+    }
+    .legend3 {
+      position: relative;
+      float: left;
+      width: 170px;
+      top: 100px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id='header'>
+    <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo" class="HeaderLogo">
+    <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
+  </div>
+  <!-- Nav bar -->
+  <div class="topnav">
+    <a href="Landing.html">Cities</a>
+    <a href="SimulationResults.html">Simulation Results</a>
+    <a class="active" href="#a">GHG Emissions Analysis</a>
+    <a href="ElectricityCostEstimation.html">Electricity Cost Estimation</a>
+    <a href="About.html">About</a>
+    <a href="Contact.html">Contact</a>
+  </div>
+  
+  <h2>GHG Emissions Analysis</h2>
+
+  <div class="container">
+    <h1>2019 total GHG emissions by diesel buses vs. BEBs(no diesel heater) at Burlington Transit. (tonnes)</h1>
+    <img class="legend" src="./images/GHG Emission legend.svg">
+    <div id="barchart" class="chart2">
+    </div>
+  </div>
+
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/d/e104e3b9e78c7456.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#barchart"));
+    });
+  </script>
+
+  <div class="container">
+  <h1>2019 diesel usage by diesel buses at Burlington Transit. (kWh)</h1>
+  <img class="legend2" src="./images/Table 14 Legend.png">
+  <div class="charts">
+    <div id="table14" class="chart1"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+  import define from "https://api.observablehq.com/d/64f1f3aef0ef9e18.js?v=3";
+  new Runtime().module(define, name => {
+    if (name === "chart") return new Inspector(document.querySelector("#table14"));
+  });
+</script>
+
+<div class="container">
+  <h1>Annual GHG emissions from electricity (no diesel heater). (tonnes)</h1>
+  <img class="legend3" src="./images/Table 15 Legend.png">
+  <div class="charts">
+    <div id="table15" class="chart1"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+  import define from "https://api.observablehq.com/d/9fcbc6eb560717ca.js?v=3";
+  new Runtime().module(define, name => {
+    if (name === "chart") return new Inspector(document.querySelector("#table15"));
+  });
+</script>
+
+</body>
+
+</html>

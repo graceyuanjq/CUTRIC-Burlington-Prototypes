@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<STYLE>
+    A {
+        text-decoration: none;
+    }
+</STYLE>
+<html>
+
+<head>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+
+    <style>
+        @font-face {
+            font-family: workSansBold;
+            src: url(./fonts/WorkSans-Bold.ttf);
+        }
+
+        @font-face {
+            font-family: workSansExtraBold;
+            src: url(./fonts/WorkSans-ExtraBold.ttf);
+        }
+
+        @font-face {
+            font-family: workSansMedium;
+            src: url(./fonts/WorkSans-Medium.ttf);
+        }
+
+        @font-face {
+            font-family: workSansRegular;
+            src: url(./fonts/WorkSans-Regular.ttf);
+        }
+
+        h1 {
+            position: relative;
+            color: rgb(0, 0, 0);
+            font-family: 'workSansBold';
+            font-size: 28px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            text-align: center;
+            margin-top: 60px;
+            bottom: 10px;
+        }
+
+        h2 {
+            position: relative;
+            color: rgb(116, 116, 116);
+            font-family: 'workSansRegular';
+            font-size: 18px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            text-align: center;
+            bottom: 20px;
+            width: 600px;
+            line-height: 1.4;
+        }
+
+        h3 {
+            position: relative;
+            color: rgb(255, 255, 255);
+            font-family: 'workSansRegular';
+            font-size: 16px;
+            margin: auto;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        #button1 {
+            margin-bottom: 6%;
+            background-color: coral;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            border: none;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            border-radius: 30px;
+        }
+
+        #button1:hover {
+            background-color: rgb(252, 108, 56);
+        }
+
+        body {
+            background-color: #2b2b2b;
+        }
+
+        img {
+            margin-top: 10px;
+            position: absolute;
+            padding: 5px;
+            max-height: 40px;
+            display: block;
+            left: 10px;
+        }
+
+        #icon {
+            margin-top: 6%;
+            position: relative;
+            padding: 5px;
+            max-height: 130px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h6 {
+            font-size: 18px;
+            margin: 0;
+            font-family: workSansBold;
+            padding: 5px;
+        }
+
+        #header {
+            position: absolute;
+            background-color: white;
+            height: 50px;
+            width: 100%;
+            top: 0;
+            left: 0;
+            fill: black;
+            align-items: center;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .centerDiv {
+            position: absolute;
+            width: 70%;
+            height: 80%;
+            left: 15%;
+            top: 10%;
+            background-color: white;
+            border-radius: 12px;
+            z-index: 1;
+        }
+
+        #map {
+            position: absolute;
+            top: 30%;
+            left: 28%;
+            width: 52%;
+            height: 50%;
+            z-index: 100;
+        }
+
+        .sidebar {
+            position: absolute;
+            width: 8%;
+            height: 50%;
+            left: 20%;
+            top: 30%;
+            z-index: 1000;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.25);
+            background-color: rgb(247, 247, 247);
+        }
+
+        a {
+            color: #404040;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #101010;
+        }
+
+        .listHeading {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            background-color: #858585;
+            color: #fff;
+        }
+
+        .listings {
+            height: 100%;
+            overflow: auto;
+            padding-bottom: 30px;
+        }
+
+        .listings .item {
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+
+        .listings .item:last-child {
+            border-bottom: none;
+        }
+
+        .listings .item .title {
+            display: block;
+            color: #4b4b4b;
+            font-weight: 700;
+        }
+
+        .listings .item .title small {
+            font-weight: 400;
+        }
+
+        .listings .item.active .title,
+        .listings .item .title:hover {
+            color: #268bff;
+        }
+
+        .listings .item.active {
+            background-color: #f8f8f8;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+            border-left: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: none;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b4b4b;
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar" class="sidebar">
+        <div class="listHeading">
+            <h6>Cities</h6>
+        </div>
+        <div id="listings" class="listings"></div>
+    </div>
+
+
+    <div class="centerDiv">
+        <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
+        <!-- <img id="icon" src="Canada Icon.svg" alt="Canada icon">    -->
+        <h1>CUTRIC Transit Fleet Electrification Analysis</h1>
+        <h2>Select a city to get started</h2>
+        <!-- <button id="button1"><a href="SimulationResults.html">
+                <h3>Enter</h3>
+            </a></button> -->
+    </div>
+
+    <div id='map'></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhY2V5dWFuIiwiYSI6ImNrcndzbGsxOTBkaXkycG1zc2E2NmpiYzMifQ.eFgEthHpFZF-yTfL2ApW6g';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/graceyuan/ckrwsyqup04bq17mxaew6855r',
+            center: [-106, 64],
+            zoom: 1.5
+        });
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            offset: [0, -24]
+        });
+        var nav = new mapboxgl.NavigationControl();
+
+        map.addControl(nav, 'bottom-right');
+
+        const cities = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Burlington, ON</strong>',
+                        'URL': "https://www.mapbox.com/"
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.809307, 43.340176]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Toronto, ON </strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.29187210632928, 43.69997393031354]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Brampton,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.75611857361986, 43.73427583013756]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Winnipeg, MB</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-97.13947516533067, 49.88636283730086]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Edmonton, AB</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-113.4934146451575, 53.54877772822723]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Vancouver, BC</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-123.11154591428813, 49.28258003484062]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Barrie,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.68288987369765, 44.367463102479284]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Belleville,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-77.35908579075702, 44.25477854834325]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Cornwall,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-74.7335625571322, 45.040980865516865]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Durham,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-80.81847874348543, 44.17684095108854]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Waterloo, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-80.53556183895952, 43.47984655686006]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Guelph, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-80.2446329560675, 43.54113142866853]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>London,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-81.2403870879556, 42.98195819455003]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Milton,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.87872543396959, 43.515431382377336]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Mississauga ,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.64941185065605, 43.59291819889112]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Ottawa,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-75.70716670308447, 45.4202459612364]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Brighton,  ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-77.73915584933599, 44.04149861035506]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Saskatoon, SK</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-106.67024842528468, 52.15782572902702]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>St. Catherines, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-79.24679846125065, 43.16102251799242]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Laval, QC</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-73.71328719851353, 45.60760287008464]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Trois-Rivières, QC</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-72.54728082578582, 46.37533034704668]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Thunder Bay, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-89.2545180284595, 48.394019226834544]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Windsor, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-82.98453869865286, 42.29246538886567]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'description':
+                            '<strong>Woodstock, ON</strong>',
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-80.74629017734837, 43.132580254520796]
+                    }
+                },
+            ]
+        };
+        cities.features.forEach((city, i) => {
+            city.properties.id = i;
+        });
+
+        map.on('load', function () {
+            map.addSource('cities', {
+                'type': 'geojson',
+                'data': cities
+            });
+            buildLocationList(cities);
+            addMarkers();
+            map.addLayer({
+                'id': 'cities',
+                'type': 'circle',
+                'source': 'cities',
+                'maxzoom': 8,
+                'paint': {
+                    'circle-color': '#ffa852',
+                    'circle-radius': 4,
+                    'circle-stroke-width': 2,
+                    'circle-stroke-color': '#ffffff'
+                }
+            });
+            map.on('click', 'cities', function (e) {
+                map.flyTo({
+                    center: e.features[0].geometry.coordinates,
+                    zoom: 10,
+                    speed: 2,
+                    curve: 1,
+                })
+            });
+            map.addLayer({
+                'id': 'enter',
+                'type': 'symbol',
+                'source': 'cities',
+                'minzoom': 10,
+                'layout': {
+                    'icon-image': 'enter',
+                    'icon-allow-overlap': true,
+                    'icon-size': 0.6
+                }
+            });
+
+            map.on('click', 'enter', function (e) {
+                window.location.href= "SimulationResults.html"
+            });
+
+            map.on('mouseenter', 'enter', function (e) {
+                map.getCanvas().style.cursor = 'pointer';
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const description = e.features[0].properties.description;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+            });
+            map.on('mouseleave', 'enter', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+            map.on('mouseenter', 'cities', function (e) {
+                map.getCanvas().style.cursor = 'pointer';
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const description = e.features[0].properties.description;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                popup.setLngLat(coordinates).setHTML(description).addTo(map);
+            });
+            map.on('mouseleave', 'cities', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+        });
+        function addMarkers() {
+            /* For each feature in the GeoJSON object above: */
+            for (const marker of cities.features) {
+                /* Create a div element for the marker. */
+                const el = document.createElement('div');
+                /* Assign a unique `id` to the marker. */
+                el.id = `marker-${marker.properties.id}`;
+                /* Assign the `marker` class to each marker for styling. */
+                el.className = 'marker';
+
+                /**
+                 * Create a marker using the div element
+                 * defined above and add it to the map.
+                 **/
+                new mapboxgl.Marker(el, { offset: [0, -23] })
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
+
+                /**
+                 * Listen to the element and when it is clicked, do three things:
+                 * 1. Fly to the point
+                 * 2. Close all other popups and display popup for clicked city
+                 * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                 **/
+                el.addEventListener('click', (e) => {
+                    /* Fly to the point */
+                    flyTocity(marker);
+                    /* Close all other popups and display popup for clicked city */
+                    createPopUp(marker);
+                    /* Highlight listing in sidebar */
+                    const activeItem = document.getElementsByClassName('active');
+                    e.stopPropagation();
+                    if (activeItem[0]) {
+                        activeItem[0].classList.remove('active');
+                    }
+                    const listing = document.getElementById(
+                        `listing-${marker.properties.id}`
+                    );
+                    listing.classList.add('active');
+                });
+            }
+        }
+
+        /**
+         * Add a listing for each city to the sidebar.
+         **/
+        function buildLocationList(cities) {
+            for (const city of cities.features) {
+                /* Add a new listing section to the sidebar. */
+                const listings = document.getElementById('listings');
+                const listing = listings.appendChild(document.createElement('div'));
+                /* Assign a unique `id` to the listing. */
+                listing.id = `listing-${city.properties.id}`;
+                /* Assign the `item` class to each listing for styling. */
+                listing.className = 'item';
+
+                /* Add the link to the individual listing created above. */
+                const link = listing.appendChild(document.createElement('a'));
+                link.href = '#';
+                link.className = 'title';
+                link.id = `link-${city.properties.id}`;
+                link.innerHTML = `${city.properties.description}`;
+
+                /* Add details to the individual listing. */
+                const details = listing.appendChild(document.createElement('div'));
+                // details.innerHTML = `${city.properties.city}`;
+
+                /**
+                 * Listen to the element and when it is clicked, do four things:
+                 * 1. Update the `currentFeature` to the city associated with the clicked link
+                 * 2. Fly to the point
+                 * 3. Close all other popups and display popup for clicked city
+                 * 4. Highlight listing in sidebar (and remove highlight for all other listings)
+                 **/
+                link.addEventListener('click', function () {
+                    for (const feature of cities.features) {
+                        if (this.id === `link-${feature.properties.id}`) {
+                            flyTocity(feature);
+                            createPopUp(feature);
+                        }
+                    }
+                    const activeItem = document.getElementsByClassName('active');
+                    if (activeItem[0]) {
+                        activeItem[0].classList.remove('active');
+                    }
+                    this.parentNode.classList.add('active');
+                });
+            }
+        }
+
+        function flyTocity(currentFeature) {
+            map.flyTo({
+                center: currentFeature.geometry.coordinates,
+                zoom: 10,
+                speed: 2,
+                curve: 1
+            });
+        }
+    </script>
+
+</body>
+
+</html>

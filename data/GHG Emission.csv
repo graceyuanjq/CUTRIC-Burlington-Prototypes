@@ -1,0 +1,109 @@
+date,name,category,value
+2019-01-01,New Flyer D40LF,Diesel Bus,276.34199
+2019-02-01,New Flyer D40LF,Diesel Bus,529.73197
+2019-03-01,New Flyer D40LF,Diesel Bus,822.6377
+2019-04-01,New Flyer D40LF,Diesel Bus,1038.49495
+2019-05-01,New Flyer D40LF,Diesel Bus,1310.22655
+2019-06-01,New Flyer D40LF,Diesel Bus,1580.90878
+2019-07-01,New Flyer D40LF,Diesel Bus,1854.76016
+2019-08-01,New Flyer D40LF,Diesel Bus,2091.17349
+2019-09-01,New Flyer D40LF,Diesel Bus,2370.75301
+2019-10-01,New Flyer D40LF,Diesel Bus,2666.86997
+2019-11-01,New Flyer D40LF,Diesel Bus,2923.16873
+2019-12-01,New Flyer D40LF,Diesel Bus,3169.35251
+2019-01-01,New Flyer XD40 Xcelsior,Diesel Bus,42.45346
+2019-02-01,New Flyer XD40 Xcelsior,Diesel Bus,70.10528
+2019-03-01,New Flyer XD40 Xcelsior,Diesel Bus,104.89229
+2019-04-01,New Flyer XD40 Xcelsior,Diesel Bus,139.8634
+2019-05-01,New Flyer XD40 Xcelsior,Diesel Bus,184.69175
+2019-06-01,New Flyer XD40 Xcelsior,Diesel Bus,235.08518
+2019-07-01,New Flyer XD40 Xcelsior,Diesel Bus,272.71259
+2019-08-01,New Flyer XD40 Xcelsior,Diesel Bus,318.94799
+2019-09-01,New Flyer XD40 Xcelsior,Diesel Bus,373.36532
+2019-10-01,New Flyer XD40 Xcelsior,Diesel Bus,424.11643
+2019-11-01,New Flyer XD40 Xcelsior,Diesel Bus,483.5518
+2019-12-01,New Flyer XD40 Xcelsior,Diesel Bus,542.832
+2019-01-01,NOVA Bus,Diesel Bus,94.77205
+2019-02-01,NOVA Bus,Diesel Bus,189.13645
+2019-03-01,NOVA Bus,Diesel Bus,274.80607
+2019-04-01,NOVA Bus,Diesel Bus,349.08253
+2019-05-01,NOVA Bus,Diesel Bus,434.48389
+2019-06-01,NOVA Bus,Diesel Bus,520.66636
+2019-07-01,NOVA Bus,Diesel Bus,609.53406
+2019-08-01,NOVA Bus,Diesel Bus,696.44504
+2019-09-01,NOVA Bus,Diesel Bus,785.01292
+2019-10-01,NOVA Bus,Diesel Bus,861.46965
+2019-11-01,NOVA Bus,Diesel Bus,947.53377
+2019-12-01,NOVA Bus,Diesel Bus,1063.33004
+2019-01-01,Light Duty Bus #1,BEB,9.916666667
+2019-02-01,Light Duty Bus #1,BEB,19.83333333
+2019-03-01,Light Duty Bus #1,BEB,29.75
+2019-04-01,Light Duty Bus #1,BEB,39.66666667
+2019-05-01,Light Duty Bus #1,BEB,49.58333333
+2019-06-01,Light Duty Bus #1,BEB,59.5
+2019-07-01,Light Duty Bus #1,BEB,69.41666667
+2019-08-01,Light Duty Bus #1,BEB,79.33333333
+2019-09-01,Light Duty Bus #1,BEB,89.25
+2019-10-01,Light Duty Bus #1,BEB,99.16666667
+2019-11-01,Light Duty Bus #1,BEB,109.0833333
+2019-12-01,Light Duty Bus #1,BEB,119
+2019-01-01,Light Duty Bus #2,BEB,9.5
+2019-02-01,Light Duty Bus #2,BEB,19
+2019-03-01,Light Duty Bus #2,BEB,28.5
+2019-04-01,Light Duty Bus #2,BEB,38
+2019-05-01,Light Duty Bus #2,BEB,47.5
+2019-06-01,Light Duty Bus #2,BEB,57
+2019-07-01,Light Duty Bus #2,BEB,66.5
+2019-08-01,Light Duty Bus #2,BEB,76
+2019-09-01,Light Duty Bus #2,BEB,85.5
+2019-10-01,Light Duty Bus #2,BEB,95
+2019-11-01,Light Duty Bus #2,BEB,104.5
+2019-12-01,Light Duty Bus #2,BEB,114
+2019-01-01,Medium Duty Bus #1,BEB,12.75
+2019-02-01,Medium Duty Bus #1,BEB,25.5
+2019-03-01,Medium Duty Bus #1,BEB,38.25
+2019-04-01,Medium Duty Bus #1,BEB,51
+2019-05-01,Medium Duty Bus #1,BEB,63.75
+2019-06-01,Medium Duty Bus #1,BEB,76.5
+2019-07-01,Medium Duty Bus #1,BEB,89.25
+2019-08-01,Medium Duty Bus #1,BEB,102
+2019-09-01,Medium Duty Bus #1,BEB,114.75
+2019-10-01,Medium Duty Bus #1,BEB,127.5
+2019-11-01,Medium Duty Bus #1,BEB,140.25
+2019-12-01,Medium Duty Bus #1,BEB,153
+2019-01-01,Medium Duty Bus #2,BEB,12.33333333
+2019-02-01,Medium Duty Bus #2,BEB,24.66666667
+2019-03-01,Medium Duty Bus #2,BEB,37
+2019-04-01,Medium Duty Bus #2,BEB,49.33333333
+2019-05-01,Medium Duty Bus #2,BEB,61.66666667
+2019-06-01,Medium Duty Bus #2,BEB,74
+2019-07-01,Medium Duty Bus #2,BEB,86.33333333
+2019-08-01,Medium Duty Bus #2,BEB,98.66666667
+2019-09-01,Medium Duty Bus #2,BEB,111
+2019-10-01,Medium Duty Bus #2,BEB,123.3333333
+2019-11-01,Medium Duty Bus #2,BEB,135.6666667
+2019-12-01,Medium Duty Bus #2,BEB,148
+2019-01-01,Heavy Duty Bus #1,BEB,19.5
+2019-02-01,Heavy Duty Bus #1,BEB,39
+2019-03-01,Heavy Duty Bus #1,BEB,58.5
+2019-04-01,Heavy Duty Bus #1,BEB,78
+2019-05-01,Heavy Duty Bus #1,BEB,97.5
+2019-06-01,Heavy Duty Bus #1,BEB,117
+2019-07-01,Heavy Duty Bus #1,BEB,136.5
+2019-08-01,Heavy Duty Bus #1,BEB,156
+2019-09-01,Heavy Duty Bus #1,BEB,175.5
+2019-10-01,Heavy Duty Bus #1,BEB,195
+2019-11-01,Heavy Duty Bus #1,BEB,214.5
+2019-12-01,Heavy Duty Bus #1,BEB,234
+2019-01-01,Heavy Duty Bus #2,BEB,18.91666667
+2019-02-01,Heavy Duty Bus #2,BEB,37.83333333
+2019-03-01,Heavy Duty Bus #2,BEB,56.75
+2019-04-01,Heavy Duty Bus #2,BEB,75.66666667
+2019-05-01,Heavy Duty Bus #2,BEB,94.58333333
+2019-06-01,Heavy Duty Bus #2,BEB,113.5
+2019-07-01,Heavy Duty Bus #2,BEB,132.4166667
+2019-08-01,Heavy Duty Bus #2,BEB,151.3333333
+2019-09-01,Heavy Duty Bus #2,BEB,170.25
+2019-10-01,Heavy Duty Bus #2,BEB,189.1666667
+2019-11-01,Heavy Duty Bus #2,BEB,208.0833333
+2019-12-01,Heavy Duty Bus #2,BEB,227

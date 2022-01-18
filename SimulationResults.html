@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<STYLE>
+  A {
+    text-decoration: none;
+  }
+</STYLE>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script
+  src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: workSansBold;
+      src: url(./fonts/WorkSans-Bold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansExtraBold;
+      src: url(./fonts/WorkSans-ExtraBold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansMedium;
+      src: url(./fonts/WorkSans-Medium.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansRegular;
+      src: url(./fonts/WorkSans-Regular.ttf);
+    }
+  
+  
+    .topnav {
+      overflow: hidden;
+      position: absolute;
+      right: 18px;
+      top: 0px;
+    }
+
+    .topnav a {
+      float: left;
+      color: #6e6e6e;
+      text-align: center;
+      padding: 16px 18px;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: 'workSansRegular';
+    }
+
+    .topnav a:hover {
+      color: rgb(65, 102, 202);
+    }
+
+    .topnav a.active {
+      color: rgb(59, 78, 163);
+      font-weight: bold;
+    }
+
+    /* Graph main title */
+    h1 {
+      position: relative;
+      color: rgb(255, 255, 255);
+      font-family: sans-serif;
+      font-size: 15px;
+      z-index: 100;
+    }
+
+    /* Legends */
+    h2 {
+      position: relative;
+      color: rgb(255, 255, 255);
+      font-family: sans-serif;
+      font-size: 12px;
+      width: 80px;
+      float: left;
+      text-align: center;
+      margin-right: 10px;
+    }
+
+    /* Graph titles */
+    h3 {
+      position: relative;
+      color: rgb(255, 255, 255);
+      font-family: sans-serif;
+      font-size: 15px;
+      float: left;
+      width: 50%;
+    }
+
+    /* Bus types */
+    h4 {
+      position: relative;
+      color: rgb(0, 0, 0);
+      font-family: sans-serif;
+      font-size: 12px;
+      z-index: 100;
+      line-height: 0;
+      padding: 5px;
+    }
+
+    /* Page title */
+    h5 {
+      color: rgb(0, 0, 0);
+      font-family: 'workSansBold';
+      font-size: 18px;
+      left: 50px;
+      position: relative;
+      bottom: 5px;
+      line-height: 0;
+    }
+
+    h6 {
+      font-size: 18px;
+      margin: 0;
+      font-family: sans-serif;
+      padding: 5px;
+    }
+    .overlay {
+      position: absolute;
+      width: 100px;
+      top: 300px;
+      left: 0px;
+      border: 1px solid rgba(0, 0, 0, 0.4);
+    }
+
+    .overlay button {
+      font-family: sans-serif;
+      background-color: #268bff;
+      font-size: 12px;
+      color: #fff;
+      display: inline-block;
+      margin: 0;
+      padding: 10px;
+      border: none;
+      width: 100px;
+      cursor: pointer;
+      display: block;
+      border: 0.5px solid rgb(48, 48, 48);
+      text-align: left;
+    }
+
+    .overlay button:hover {
+      background-color: #0f428a;
+    }
+
+    .overlay2 {
+      position: absolute;
+      width: 100px;
+      top: 300px;
+      left: 50%;
+      margin-left: 0px;
+      border: 1px solid rgba(0, 0, 0, 0.4);
+    }
+
+    .overlay2 button {
+      font-family: sans-serif;
+      font-size: 12px;
+      background-color: #268bff;
+      color: #fff;
+      display: inline-block;
+      margin: 0;
+      padding: 10px;
+      border: none;
+      width: 100px;
+      cursor: pointer;
+      display: block;
+      border: 0.5px solid rgb(48, 48, 48);
+      text-align: left;
+    }
+
+    .overlay2 button:hover {
+      background-color: #0f428a;
+    }
+
+    #menu {
+      position: absolute;
+      z-index: 1;
+      top: 50px;
+      left: 0px;
+      width: 100px;
+      border: 1px solid rgb(48, 48, 48);
+      font-family: sans-serif;
+      background-color: white;
+    }
+
+    #menu a {
+      font-size: 12px;
+      color: #2b2b2b;
+      display: block;
+      margin: 0;
+      padding: 0;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgb(48, 48, 48);
+      text-align: left;
+    }
+
+    #menu a:last-child {
+      border: none;
+    }
+
+    #menu a:hover {
+      background-color: #f8f8f8;
+      color: #4b4b4b;
+    }
+
+    #menu a.active {
+      background-color: #2b2b2b;
+      color: #ffffff;
+    }
+
+    #menu a.active:hover {
+      background: #858585;
+    }
+
+    #menu2 {
+      position: absolute;
+      z-index: 1;
+      top: 50px;
+      left: 50%;
+      margin-left: 0px;
+      width: 100px;
+      border: 1px solid rgb(48, 48, 48);
+      font-family: sans-serif;
+      background-color: white;
+    }
+
+    #menu2 a {
+      font-size: 12px;
+      color: #2b2b2b;
+      display: block;
+      margin: 0;
+      padding: 0;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgb(48, 48, 48);
+      text-align: left;
+    }
+
+    #menu2 a:last-child {
+      border: none;
+    }
+
+    #menu2 a:hover {
+      background-color: #f8f8f8;
+      color: #4b4b4b;
+    }
+
+    #menu2 a.active {
+      background-color: #2b2b2b;
+      color: #ffffff;
+    }
+
+    #menu2 a.active:hover {
+      background: #858585;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #2b2b2b;
+    }
+
+    #map {
+      position: absolute;
+      top: 50px;
+      bottom: 0;
+      left: 0%;
+      width: 50%;
+      height: 50%;
+    }
+
+    #map2 {
+      position: absolute;
+      top: 50px;
+      bottom: 0;
+      right: 0;
+      width: 50%;
+      height: 50%;
+    }
+
+    .charts {
+      position: absolute;
+      top: calc(50% + 50px);
+      bottom: 0;
+      width: 100%;
+      height: 40%;
+      z-index: 10;
+      padding-top: 40px;
+      padding-left: 20px;
+      overflow: scroll;
+    }
+
+    .charts chart1 {
+      position: relative;
+      padding: 10px;
+      height: 260px;
+    }
+
+    .chart2 {
+      float: left;
+      width: 50%;
+      height: 260px;
+    }
+
+    .chartMenu {
+      left: 0px;
+      width: 100px;
+      font-family: sans-serif;
+      position: absolute;
+      background-color: #ff9494;
+      top: calc(50% + 50px);
+      width: 100px;
+      z-index: 20;
+    }
+
+    .chartMenu button {
+      height: 10%;
+      font-size: 12px;
+      color: #2b2b2b;
+      display: block;
+      margin: 0;
+      padding: 0;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgb(48, 48, 48);
+      text-align: left;
+    }
+
+    .chartMenu button:hover {
+      background-color: #9dc6ff;
+    }
+
+    .inv {
+      display: none;
+    }
+
+    .dropDown {
+      position: absolute;
+      top: calc(50% + 50px);
+      z-index: 50;
+    }
+
+    .dropDown select {
+      font-family: sans-serif;
+      font-size: 12px;
+      background-color: #268bff;
+      height: 40px;
+      color: white;
+      width: 300px;
+    }
+
+    .dropDown2 {
+      position: absolute;
+      top: calc(50% + 50px);
+      z-index: 50;
+      left: 300px;
+    }
+
+    .dropDown2 select {
+      font-family: sans-serif;
+      font-size: 12px;
+      background-color: #268bff;
+      height: 40px;
+      color: white;
+      width: 300px;
+    }
+
+    .busType1 {
+      position: absolute;
+      top: 50px;
+      left: 15%;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.8);
+      opacity: 70;
+    }
+
+    .busType2 {
+      position: absolute;
+      top: 50px;
+      left: 65%;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    #header {
+      position: absolute;
+      background-color: white;
+      height: 50px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      fill: black;
+      align-items: center;
+    }
+
+    img {
+      position: absolute;
+      padding: 5px;
+      max-height: 40px;
+      float: left;
+      width: 33.4px;
+      height: 48.3px;
+    }
+
+    #dropDownBar {
+      position: absolute;
+      top: calc(50% + 50px);
+      width: 100%;
+      height: 40px;
+      background-color: #2b2b2b;
+      z-index: 30;
+    }
+
+    #GHGButton1 {
+      position: absolute;
+      z-index: 100;
+      right: 53%;
+      background-color: #2b2b2b;
+      bottom: 47%;
+      width: 40px;
+      height: 40px;
+      display: block;
+
+    }
+
+    #GHGButton1:hover {
+      background-color: #747474;
+    }
+
+    #GHGButton2 {
+      position: absolute;
+      z-index: 100;
+      right: 3%;
+      background-color: #2b2b2b;
+      bottom: 47%;
+      width: 40px;
+      display: block;
+
+    }
+
+    #GHGButton2:hover {
+      background-color: #747474;
+    }
+
+    #CostButton1 {
+      position: absolute;
+      z-index: 100;
+      right: calc(53% + 55px);
+      background-color: #2b2b2b;
+      bottom: 47%;
+      width: 40px;
+      display: block;
+
+    }
+
+    #CostButton1:hover {
+      background-color: #747474;
+    }
+
+    #CostButton2 {
+      position: absolute;
+      z-index: 100;
+      right: calc(3% + 55px);
+      background-color: #202020;
+      bottom: 47%;
+      width: 40px;
+      display: block;
+
+    }
+
+    #CostButton2:hover {
+      background-color: #747474;
+    }
+
+    #marker {
+      background-image: url('https://uploads-ssl.webflow.com/5edfda957c7cd114aa5e9dbd/610a10bb29b5b67c1c9bb812_bus.png');
+      background-size: cover;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .mapboxgl-popup {
+      max-width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='header'>
+    <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
+    <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
+  </div>
+
+  <!-- Nav bar -->
+  <div class="topnav">
+    <a href="Landing.html">Cities</a>
+    <a class="active" href="#a">Simulation Results</a>
+    <a href="GHGEmissionsAnalysis.html">GHG Emissions Analysis</a>
+    <a href="ElectricityCostEstimation.html">Electricity Cost Estimation</a>
+    <a href="About.html">About</a>
+    <a href="Contact.html">Contact</a>
+  </div>
+
+  <div class='busType1'>
+    <h4>Bus#1: Battery 400+ kWh, Weight ~15,000 kg</h4>
+  </div>
+  <div class='busType2'>
+    <h4>Bus#2: Battery 600+ kWh, Weight ~15,000 kg</h4>
+  </div>
+  <nav id="menu" class='menu'></nav>
+  <nav id="menu2" class='menu2'></nav>
+  <div id='map'></div>
+  <div id='map2'></div>
+  <div class="overlay">
+    <button id="Bus 1 Route 4-1">Bus #1 4-1</button>
+    <button id="Bus 1 Route 4-2">Bus #1 4-2</button>
+  </div>
+  <div class="overlay2">
+    <button id="Bus 2 Route 4-1">Bus #2 4-1</button>
+    <button id="Bus 2 Route 4-2">Bus #2 4-2</button>
+
+  </div>
+  <div id=dropDownBar></div>
+  <div class="dropDown">
+    <select id="target">
+      <option value="">Range Analysis</option>
+      <option value="noDieselDepot">No Diesel Heater, Depot Only Charging</option>
+      <option value="dieselDepot">Diesel Heater, Depot Only Charging</option>
+      <option value="noDieselOppor">No Diesel Heater, Opportunity Charging</option>
+      <option value="dieselOppor">Diesel Heater, Opportunity Charging</option>
+      <select>
+  </div>
+
+  <div id="noDieselDepot" class='inv'>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Depot-only Charging: Bus #1’s ranges compared with operation distance: A) Weekday B) Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure6A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure6B" class='chart2'></div>
+    <div id="figure6C" class='chart2'></div>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Depot-only Charging: Bus #2’s ranges compared with operation distance: A) Weekday B) Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure7A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure7B" class='chart2'></div>
+    <div id="figure7C" class='chart2'></div>
+    <h3>Success rate of one-to-one replacement of diesel buses with BEBs without a diesel heater(summer and winter are
+      the same).</h3>
+    <div id="figure5" class='chart1'></div>
+  </div>
+
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/grouped-bar-chart.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure5"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure6B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure6C"));
+    });
+  </script>
+
+    <script type="module">
+      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+      new Runtime().module(define, name => {
+        if (name === "chart") return new Inspector(document.querySelector("#figure7B"));
+      });
+    </script>
+    <script type="module">
+      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+      new Runtime().module(define, name => {
+        if (name === "chart") return new Inspector(document.querySelector("#figure7C"));
+      });
+    </script>
+
+  <div id="dieselDepot" class='inv'>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Depot-only Charging: Bus #1’s ranges after using diesel heater compared with operation distance: A) Weekday B)
+      Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure9A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure9B" class='chart2'></div>
+    <div id="figure9C" class='chart2'></div>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Depot-only Charging: Bus #2’s ranges after using diesel heater compared with operation distance: A) Weekday B)
+      Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure10A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure10B" class='chart2'></div>
+    <div id="figure10C" class='chart2'></div>
+    <h3>Success rateof one-to-one replacement of diesel buses with BEBs after using diesel heater in winter.</h3>
+    <div id="figure51" class='chart1'></div>
+
+  </div>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/grouped-bar-chart.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure51"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure9A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure9B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure9C"));
+    });
+  </script>
+    <script type="module">
+      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+      import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+      new Runtime().module(define, name => {
+        if (name === "chart") return new Inspector(document.querySelector("#figure10A"));
+      });
+    </script>
+    <script type="module">
+      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+      new Runtime().module(define, name => {
+        if (name === "chart") return new Inspector(document.querySelector("#figure10B"));
+      });
+    </script>
+    <script type="module">
+      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+      new Runtime().module(define, name => {
+        if (name === "chart") return new Inspector(document.querySelector("#figure10C"));
+      });
+    </script>
+
+
+  <div id="noDieselOppor" class='inv'>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Opportunity Charging: Bus #1’s ranges compared with operation distance: A) Weekday B) Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure11A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure11B" class='chart2'></div>
+    <div id="figure11C" class='chart2'></div>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Opportunity Charging: Bus #2’s ranges compared with operation distance: A) Weekday B) Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure12A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure12B" class='chart2'></div>
+    <div id="figure12C" class='chart2'></div>
+    <h3>Success rate of one-to-one replacement of diesel buses with opportunity charging BEBs without a diesel
+      heater(summer and winter are the same).</h3>
+    <div id="figure52" class='chart1'></div>
+
+  </div>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/grouped-bar-chart.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure52"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure11A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure11B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure11C"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure12A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure12B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure12C"));
+    });
+  </script>
+
+  <div id="dieselOppor" class='inv'>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Opportunity Charging: Bus #1’s ranges after using diesel heater compared with operation distance: A) Weekday B)
+      Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure13A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure13B" class='chart2'></div>
+    <div id="figure13C" class='chart2'></div>
+    <div>
+      <h2 style="background-color:#ffc34a;">Light Duty</h2>
+      <h2 style="background-color:#ff894a;">Medium Duty</h2>
+      <h2 style="background-color:#ff4a4a;">Heavy Duty</h2>
+    </div>
+    <h1>Opportunity Charging: Bus #2’s ranges after using diesel heater compared with operation distance: A) Weekday B)
+      Saturday C) Sunday</h1>
+    <h3>A) Weekday</h3>
+    <div id="figure14A" class='chart1'></div>
+    <h3>B) Saturday</h3>
+    <h3>C) Sunday</h3>
+    <div id="figure14B" class='chart2'></div>
+    <div id="figure14C" class='chart2'></div>
+    <h3>Success rate of one-to-one replacement of diesel buses with opportunity charging BEBs with a diesel
+      heater(summer and winter are the same).</h3>
+    <div id="figure53" class='chart1'></div>
+
+  </div>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/grouped-bar-chart.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure53"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure13A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure13B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure13C"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure14A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure14B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure14C"));
+    });
+  </script>
+
+  <script>
+    document
+      .getElementById('target')
+      .addEventListener('change', function () {
+        'use strict';
+        var charts = document.querySelector('.charts'),
+          target = document.getElementById(this.value);
+        if (charts !== null) {
+          charts.className = 'inv';
+        }
+        if (target !== null) {
+          target.className = 'charts';
+        }
+      });
+  </script>
+  <p><a href="GHGEmissionsAnalysis.html">
+      <img src="./images/icon-GHG.svg" id="GHGButton1">
+    </a></p>
+  <p><a href="ElectricityCostEstimation.html">
+      <img src="./images/icon-Cost.svg" id="CostButton1">
+    </a></p>
+  <p><a href="GHGEmissionsAnalysis.html">
+      <img src="./images/icon-GHG.svg" id="GHGButton2">
+    </a></p>
+  <p><a href="ElectricityCostEstimation.html">
+      <img src="./images/icon-Cost.svg" id="CostButton2">
+    </a></p>
+
+  <script>
+    
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhY2V5dWFuIiwiYSI6ImNrcndzbGsxOTBkaXkycG1zc2E2NmpiYzMifQ.eFgEthHpFZF-yTfL2ApW6g';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/graceyuan/ckrwsyqup04bq17mxaew6855r',
+      center: [-79.809307, 43.340176],
+      zoom: 10
+    });
+    var map2 = new mapboxgl.Map({
+      container: 'map2',
+      style: 'mapbox://styles/graceyuan/ckrwsyqup04bq17mxaew6855r',
+      center: [-79.809307, 43.340176],
+      zoom: 10
+    });
+
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+    var disable = false;
+    map.on("move", function () {
+      if (!disable) {
+        var center = map.getCenter();
+        var zoom = map.getZoom();
+        var pitch = map.getPitch();
+        var bearing = map.getBearing();
+
+        disable = true;
+        map2.setCenter(center);
+        map2.setZoom(zoom);
+        map2.setPitch(pitch);
+        map2.setBearing(bearing);
+        disable = false;
+      }
+    })
+    map2.on("move", function () {
+      if (!disable) {
+        var center = map2.getCenter();
+        var zoom = map2.getZoom();
+        var pitch = map2.getPitch();
+        var bearing = map2.getBearing();
+
+        disable = true;
+        map.setCenter(center);
+        map.setZoom(zoom);
+        map.setPitch(pitch);
+        map.setBearing(bearing);
+        disable = false;
+      }
+    })
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      })
+    );
+    map2.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      })
+    );
+    const chargerLocations = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Potential Charger Location</strong><p>Stop ID:85</p><p>BURLINGTON GO STATION</p>',
+            'icon': 'charger'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.809307, 43.340176]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Potential Charger Location</strong><p>Stop ID:615</p><p>GO 407 CARPOOL</p>',
+            'icon': 'charger'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.82867, 43.388859]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Potential Charger Location</strong><p>Stop ID:474</p><p>5031 FAIRVIEW</p>',
+            'icon': 'charger'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.761631, 43.373905]
+          }
+        }]
+    };
+    const cities = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Burlington, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.809307, 43.340176]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Toronto, ON </strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.29187210632928, 43.69997393031354]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Brampton,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.75611857361986, 43.73427583013756]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Winnipeg, MB</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-97.13947516533067, 49.88636283730086]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Edmonton, AB</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-113.4934146451575, 53.54877772822723]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Vancouver, BC</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-123.11154591428813, 49.28258003484062]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Barrie,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.68288987369765, 44.367463102479284]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Belleville,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-77.35908579075702, 44.25477854834325]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Cornwall,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-74.7335625571322, 45.040980865516865]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Durham,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-80.81847874348543, 44.17684095108854]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Waterloo, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-80.53556183895952, 43.47984655686006]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Guelph, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-80.2446329560675, 43.54113142866853]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>London,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-81.2403870879556, 42.98195819455003]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Milton,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.87872543396959, 43.515431382377336]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Mississauga ,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.64941185065605, 43.59291819889112]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Ottawa,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-75.70716670308447, 45.4202459612364]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Brighton,  ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-77.73915584933599, 44.04149861035506]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Saskatoon, SK</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-106.67024842528468, 52.15782572902702]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>St. Catherines, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.24679846125065, 43.16102251799242]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Laval, QC</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-73.71328719851353, 45.60760287008464]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Trois-Rivières, QC</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-72.54728082578582, 46.37533034704668]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Thunder Bay, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-89.2545180284595, 48.394019226834544]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Windsor, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-82.98453869865286, 42.29246538886567]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Woodstock, ON</strong>',
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-80.74629017734837, 43.132580254520796]
+          }
+        },
+      ]
+    };
+    cities.features.forEach((city, i) => {
+      city.properties.id = i;
+    });
+    const route4MainStops = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>ALDERSHOT GO STATION</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.856398, 43.31312]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>PLAINS AT LONG DRIVE</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.83319, 43.32122]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>JOSEPH BRANT HOSPITAL</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.803984, 43.317662]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>JOHN STREET TERMINAL</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.796914, 43.325782]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>DRURY AT TEEN TOUR WAY</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.793125, 43.334786]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>GUELPH AT PROSPECT</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.794254, 43.344725]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>WALKERS AT NEW</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.770086, 43.353383]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>PINEDALE AT NEW</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.744762, 43.375629]
+          }
+        },
+        {
+          'type': 'Feature',
+          'properties': {
+            'description':
+              '<strong>Route 4</strong><p>APPLEBY GO STATION</p>',
+            'icon': 'bus'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [-79.760622, 43.379496]
+          }
+        }]
+    };
+    const origin = [-79.85638880381256,
+      43.31312161398645];
+    const destination = [-79.76059469353302,
+      43.37951315648692];
+    const map1_Route4 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              [-79.856388, 43.313121],
+              [-79.8561, 43.312815],
+              [-79.858036, 43.311589],
+              [-79.857828, 43.311198],
+              [-79.857593, 43.310941],
+              [-79.857847, 43.31067],
+              [-79.854871, 43.308391],
+              [-79.851679, 43.30594],
+              [-79.853441, 43.3047],
+              [-79.854401, 43.303973],
+              [-79.854694, 43.303702],
+              [-79.854773, 43.303389],
+              [-79.854753, 43.303032],
+              [-79.854401, 43.302291],
+              [-79.85303, 43.300139],
+              [-79.852795, 43.300182],
+              [-79.851796, 43.300225],
+              [-79.851091, 43.300282],
+              [-79.850621, 43.30041],
+              [-79.850092, 43.300681],
+              [-79.849818, 43.301094],
+              [-79.84976, 43.301508],
+              [-79.849818, 43.301921],
+              [-79.849525, 43.302548],
+              [-79.849172, 43.302847],
+              [-79.84835, 43.303389],
+              [-79.84974, 43.304472],
+              [-79.850014, 43.3047],
+              [-79.84457, 43.308932],
+              [-79.841888, 43.310927],
+              [-79.844629, 43.312893],
+              [-79.841887, 43.314959],
+              [-79.833692, 43.321004],
+              [-79.833024, 43.321515],
+              [-79.83251, 43.321777],
+              [-79.829047, 43.319358],
+              [-79.82879, 43.319595],
+              [-79.828464, 43.319807],
+              [-79.828242, 43.320031],
+              [-79.82831, 43.320305],
+              [-79.828584, 43.320655],
+              [-79.828464, 43.320941],
+              [-79.828002, 43.321266],
+              [-79.827265, 43.321852],
+              [-79.827987, 43.322569],
+              [-79.82724, 43.323145],
+              [-79.826907, 43.322978],
+              [-79.826643, 43.322903],
+              [-79.825931, 43.322736],
+              [-79.825287, 43.322468],
+              [-79.8233, 43.321056],
+              [-79.819018, 43.318044],
+              [-79.814435, 43.315061],
+              [-79.81393, 43.314651],
+              [-79.813665, 43.314392],
+              [-79.813642, 43.314267],
+              [-79.811827, 43.314517],
+              [-79.810415, 43.314417],
+              [-79.809542, 43.314384],
+              [-79.80868, 43.314576],
+              [-79.80698, 43.315228],
+              [-79.80644, 43.315562],
+              [-79.80327, 43.318058],
+              [-79.801719, 43.31927],
+              [-79.801202, 43.31977],
+              [-79.800685, 43.320346],
+              [-79.800363, 43.320747],
+              [-79.799145, 43.321951],
+              [-79.796906, 43.323864],
+              [-79.796779, 43.32404],
+              [-79.796607, 43.324107],
+              [-79.79609, 43.324458],
+              [-79.795311, 43.324743],
+              [-79.795449, 43.324899],
+              [-79.797683, 43.326446],
+              [-79.795449, 43.328161],
+              [-79.795341, 43.328317],
+              [-79.795479, 43.328829],
+              [-79.795387, 43.329118],
+              [-79.792617, 43.331634],
+              [-79.789695, 43.334311],
+              [-79.791376, 43.335537],
+              [-79.792058, 43.335009],
+              [-79.79318, 43.334737],
+              [-79.794258, 43.335169],
+              [-79.795644, 43.336705],
+              [-79.796458, 43.337409],
+              [-79.797074, 43.337873],
+              [-79.800679, 43.340519],
+              [-79.796317, 43.343787],
+              [-79.794504, 43.345125],
+              [-79.793426, 43.345889],
+              [-79.79269, 43.346653],
+              [-79.788223, 43.350781],
+              [-79.786199, 43.352023],
+              [-79.782336, 43.349119],
+              [-79.779656, 43.351221],
+              [-79.779262, 43.35189],
+              [-79.777685, 43.353055],
+              [-79.773664, 43.355921],
+              [-79.769565, 43.35273],
+              [-79.767278, 43.354851],
+              [-79.77009, 43.356915],
+              [-79.771352, 43.357947],
+              [-79.771562, 43.362379],
+              [-79.77101, 43.363774],
+              [-79.768592, 43.36578],
+              [-79.767646, 43.36643],
+              [-79.766069, 43.366831],
+              [-79.765255, 43.366697],
+              [-79.762522, 43.365685],
+              [-79.761313, 43.365666],
+              [-79.759657, 43.36599],
+              [-79.758107, 43.367347],
+              [-79.756036, 43.369275],
+              [-79.753627, 43.371492],
+              [-79.753535, 43.372024],
+              [-79.75381, 43.373797],
+              [-79.753596, 43.374817],
+              [-79.753152, 43.375522],
+              [-79.750133, 43.378449],
+              [-79.749462, 43.378715],
+              [-79.748608, 43.378604],
+              [-79.744582, 43.375589],
+              [-79.744826, 43.375168],
+              [-79.753701, 43.367364],
+              [-79.756416, 43.369426],
+              [-79.756751, 43.369603],
+              [-79.762119, 43.373549],
+              [-79.761601, 43.374081],
+              [-79.758917, 43.376587],
+              [-79.757941, 43.378249],
+              [-79.760594, 43.379513]
+            ],
+            "type": "LineString"
+          }
+        }
+      ]
+    };
+
+    const bus1_Route4Bus1 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'properties': {
+            'description':
+              '<p>Bus4-1</p>'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': origin
+          }
+        }
+      ]
+    };
+    const bus1_Route4Bus1_lineDistance = turf.lineDistance(map1_Route4.features[0]);
+    const bus1_Route4Bus1_arc = [];
+    const bus1_Route4Bus1_steps = 500;
+    for (let i = 0; i < bus1_Route4Bus1_lineDistance; i += bus1_Route4Bus1_lineDistance / bus1_Route4Bus1_steps) {
+      const bus1_Route4Bus1_segment = turf.along(map1_Route4.features[0], i);
+      bus1_Route4Bus1_arc.push(bus1_Route4Bus1_segment.geometry.coordinates);
+    }
+    map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus1_arc;
+    let bus1_Route4Bus1_counter = 0;
+
+    const bus1_Route4Bus2 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'properties': {
+            'description':
+              '<p>Bus4-2</p>'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': origin
+          }
+        }
+      ]
+    };
+    const bus1_Route4Bus2_lineDistance = turf.lineDistance(map1_Route4.features[0]);
+    const bus1_Route4Bus2_arc = [];
+    const bus1_Route4Bus2_steps = 2000;
+    for (let i = 0; i < bus1_Route4Bus2_lineDistance; i += bus1_Route4Bus2_lineDistance / bus1_Route4Bus2_steps) {
+      const bus1_Route4Bus2_segment = turf.along(map1_Route4.features[0], i);
+      bus1_Route4Bus2_arc.push(bus1_Route4Bus2_segment.geometry.coordinates);
+    }
+    map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus2_arc;
+    let bus1_Route4Bus2_counter = 0;
+
+    const map2_Route4 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              [-79.856388, 43.313121],
+              [-79.8561, 43.312815],
+              [-79.858036, 43.311589],
+              [-79.857828, 43.311198],
+              [-79.857593, 43.310941],
+              [-79.857847, 43.31067],
+              [-79.854871, 43.308391],
+              [-79.851679, 43.30594],
+              [-79.853441, 43.3047],
+              [-79.854401, 43.303973],
+              [-79.854694, 43.303702],
+              [-79.854773, 43.303389],
+              [-79.854753, 43.303032],
+              [-79.854401, 43.302291],
+              [-79.85303, 43.300139],
+              [-79.852795, 43.300182],
+              [-79.851796, 43.300225],
+              [-79.851091, 43.300282],
+              [-79.850621, 43.30041],
+              [-79.850092, 43.300681],
+              [-79.849818, 43.301094],
+              [-79.84976, 43.301508],
+              [-79.849818, 43.301921],
+              [-79.849525, 43.302548],
+              [-79.849172, 43.302847],
+              [-79.84835, 43.303389],
+              [-79.84974, 43.304472],
+              [-79.850014, 43.3047],
+              [-79.84457, 43.308932],
+              [-79.841888, 43.310927],
+              [-79.844629, 43.312893],
+              [-79.841887, 43.314959],
+              [-79.833692, 43.321004],
+              [-79.833024, 43.321515],
+              [-79.83251, 43.321777],
+              [-79.829047, 43.319358],
+              [-79.82879, 43.319595],
+              [-79.828464, 43.319807],
+              [-79.828242, 43.320031],
+              [-79.82831, 43.320305],
+              [-79.828584, 43.320655],
+              [-79.828464, 43.320941],
+              [-79.828002, 43.321266],
+              [-79.827265, 43.321852],
+              [-79.827987, 43.322569],
+              [-79.82724, 43.323145],
+              [-79.826907, 43.322978],
+              [-79.826643, 43.322903],
+              [-79.825931, 43.322736],
+              [-79.825287, 43.322468],
+              [-79.8233, 43.321056],
+              [-79.819018, 43.318044],
+              [-79.814435, 43.315061],
+              [-79.81393, 43.314651],
+              [-79.813665, 43.314392],
+              [-79.813642, 43.314267],
+              [-79.811827, 43.314517],
+              [-79.810415, 43.314417],
+              [-79.809542, 43.314384],
+              [-79.80868, 43.314576],
+              [-79.80698, 43.315228],
+              [-79.80644, 43.315562],
+              [-79.80327, 43.318058],
+              [-79.801719, 43.31927],
+              [-79.801202, 43.31977],
+              [-79.800685, 43.320346],
+              [-79.800363, 43.320747],
+              [-79.799145, 43.321951],
+              [-79.796906, 43.323864],
+              [-79.796779, 43.32404],
+              [-79.796607, 43.324107],
+              [-79.79609, 43.324458],
+              [-79.795311, 43.324743],
+              [-79.795449, 43.324899],
+              [-79.797683, 43.326446],
+              [-79.795449, 43.328161],
+              [-79.795341, 43.328317],
+              [-79.795479, 43.328829],
+              [-79.795387, 43.329118],
+              [-79.792617, 43.331634],
+              [-79.789695, 43.334311],
+              [-79.791376, 43.335537],
+              [-79.792058, 43.335009],
+              [-79.79318, 43.334737],
+              [-79.794258, 43.335169],
+              [-79.795644, 43.336705],
+              [-79.796458, 43.337409],
+              [-79.797074, 43.337873],
+              [-79.800679, 43.340519],
+              [-79.796317, 43.343787],
+              [-79.794504, 43.345125],
+              [-79.793426, 43.345889],
+              [-79.79269, 43.346653],
+              [-79.788223, 43.350781],
+              [-79.786199, 43.352023],
+              [-79.782336, 43.349119],
+              [-79.779656, 43.351221],
+              [-79.779262, 43.35189],
+              [-79.777685, 43.353055],
+              [-79.773664, 43.355921],
+              [-79.769565, 43.35273],
+              [-79.767278, 43.354851],
+              [-79.77009, 43.356915],
+              [-79.771352, 43.357947],
+              [-79.771562, 43.362379],
+              [-79.77101, 43.363774],
+              [-79.768592, 43.36578],
+              [-79.767646, 43.36643],
+              [-79.766069, 43.366831],
+              [-79.765255, 43.366697],
+              [-79.762522, 43.365685],
+              [-79.761313, 43.365666],
+              [-79.759657, 43.36599],
+              [-79.758107, 43.367347],
+              [-79.756036, 43.369275],
+              [-79.753627, 43.371492],
+              [-79.753535, 43.372024],
+              [-79.75381, 43.373797],
+              [-79.753596, 43.374817],
+              [-79.753152, 43.375522],
+              [-79.750133, 43.378449],
+              [-79.749462, 43.378715],
+              [-79.748608, 43.378604],
+              [-79.744582, 43.375589],
+              [-79.744826, 43.375168],
+              [-79.753701, 43.367364],
+              [-79.756416, 43.369426],
+              [-79.756751, 43.369603],
+              [-79.762119, 43.373549],
+              [-79.761601, 43.374081],
+              [-79.758917, 43.376587],
+              [-79.757941, 43.378249],
+              [-79.760594, 43.379513]
+            ],
+            "type": "LineString"
+          }
+        }
+      ]
+    };
+
+    const bus2_Route4Bus1 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'Point',
+            'coordinates': origin
+          }
+        }
+      ]
+    };
+    const bus2_Route4Bus1_lineDistance = turf.length(map2_Route4.features[0]);
+    const bus2_Route4Bus1_arc = [];
+    const bus2_Route4Bus1_steps = 1500;
+    for (let i = 0; i < bus2_Route4Bus1_lineDistance; i += bus2_Route4Bus1_lineDistance / bus2_Route4Bus1_steps) {
+      const bus2_Route4Bus1_segment = turf.along(map2_Route4.features[0], i);
+      bus2_Route4Bus1_arc.push(bus2_Route4Bus1_segment.geometry.coordinates);
+    }
+    map2_Route4.features[0].geometry.coordinates = bus2_Route4Bus1_arc;
+    let bus2_Route4Bus1_counter = 0;
+
+    const bus2_Route4Bus2 = {
+      'type': 'FeatureCollection',
+      'features': [
+        {
+          'properties': {
+            'description':
+              '<p>Bus4-2</p>'
+          },
+          'geometry': {
+            'type': 'Point',
+            'coordinates': origin
+          }
+        }
+      ]
+    };
+    const bus2_Route4Bus2_lineDistance = turf.lineDistance(map2_Route4.features[0]);
+    const bus2_Route4Bus2_arc = [];
+    const bus2_Route4Bus2_steps = 2000;
+    for (let i = 0; i < bus2_Route4Bus2_lineDistance; i += bus2_Route4Bus2_lineDistance / bus2_Route4Bus2_steps) {
+      const bus2_Route4Bus2_segment = turf.along(map2_Route4.features[0], i);
+      bus2_Route4Bus2_arc.push(bus2_Route4Bus2_segment.geometry.coordinates);
+    }
+    map2_Route4.features[0].geometry.coordinates = bus2_Route4Bus2_arc;
+    let bus2_Route4Bus2_counter = 0;
+
+    var batteryColor = ['#00b81c', '#ffb700', '#ff0000']
+
+
+
+    map.on('load', function () {
+      var nav = new mapboxgl.NavigationControl();
+      map.addControl(nav, 'bottom-right');
+      map.addSource('Contours', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+      });
+      map.addLayer({
+        'id': 'Map 1 Contours',
+        'type': 'line',
+        'source': 'Contours',
+        'source-layer': 'contour',
+        'layout': {
+          'visibility': 'visible',
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#877b59',
+          'line-width': 1
+        }
+      });
+      map.addSource('All Routes', {
+        "url": "mapbox://graceyuan.ckrxk0lzh0bh527lgxma2fwwo-89q4u",
+        "type": "vector"
+      });
+      map.addLayer({
+        'id': 'Map 1 All Bus Routes',
+        'type': 'circle',
+        'source': 'All Routes',
+        "minzoom": 10,
+        'source-layer': 'Burlington_Shape',
+        'layout': {
+          'visibility': 'none'
+        },
+        'paint': {
+          'circle-color': '#8296f3',
+          'circle-opacity': 0.75,
+          'circle-radius': 3
+        }
+      });
+      map.addSource('All Stops', {
+        "url": "mapbox://graceyuan.ckrwt41m305e221rv6u11kugr-20yrv",
+        "type": "vector"
+      });
+      map.addLayer({
+        'id': 'Map 1 All Bus Stops',
+        'type': 'symbol',
+        'source': 'All Stops',
+        'icon-size': 0.6,
+        "minzoom": 10,
+        'source-layer': 'Burlington_Bus_Stops',
+        'layout': {
+          'visibility': 'none',
+          'icon-image': 'bus',
+          'icon-allow-overlap': true
+        }
+      });
+
+      map.addSource('map1_Route4', {
+        'type': 'geojson',
+        'data': map1_Route4
+      });
+      map.addLayer({
+        'id': 'map1_Route4',
+        'source': 'map1_Route4',
+        'type': 'line',
+        'paint': {
+          'line-width': 4,
+          'line-color': '#c180ff'
+        },
+        "minzoom": 10
+      });
+      map.addSource('route4MainStops', {
+        'type': 'geojson',
+        'data': route4MainStops
+      });
+      map.addLayer({
+        'id': 'Map 1 Route 4 Main Stops',
+        'type': 'symbol',
+        'icon-size': 0.6,
+        "minzoom": 10,
+        'source': 'route4MainStops',
+        'layout': {
+          'icon-image': '{icon}',
+          'icon-allow-overlap': true
+        }
+      });
+      map.on('mouseenter', 'Map 1 Route 4 Main Stops', function (e) {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+      });
+      map.on('mouseleave', 'Map 1 Route 4 Main Stops', () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+      map.addSource('chargerLocations', {
+        'type': 'geojson',
+        'data': chargerLocations
+      });
+      map.addLayer({
+        'id': 'chargerLocations',
+        'type': 'symbol',
+        'icon-size': 1,
+        "minzoom": 10,
+        'source': 'chargerLocations',
+        'layout': {
+          'icon-image': '{icon}',
+          'icon-allow-overlap': true
+        }
+      });
+      map.on('mouseenter', 'chargerLocations', function (e) {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+      });
+      map.on('mouseleave', 'chargerLocations', () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+      map.addLayer({
+        'id': 'map1_Route4',
+        'source': 'map1_Route4',
+        'type': 'line',
+        'paint': {
+          'line-width': 4,
+          'line-color': '#c180ff'
+        },
+        "minzoom": 10
+      });
+
+      map.addSource('bus1_Route4Bus1', {
+        'type': 'geojson',
+        'data': bus1_Route4Bus1
+      });
+      map.addLayer({
+        'id': 'bus1_Route4Bus1_battery',
+        'source': 'bus1_Route4Bus1',
+        'type': 'circle',
+        "minzoom": 10,
+        'paint': {
+          'circle-color': batteryColor[0],
+          'circle-opacity': 1,
+          'circle-radius': 13,
+        }
+      });
+      map.addLayer({
+        'id': 'bus1_Route4Bus1',
+        'source': 'bus1_Route4Bus1',
+        'type': 'symbol',
+        "minzoom": 10,
+        'layout': {
+          'icon-image': '1Asset 4',
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-size': 1,
+          'icon-ignore-placement': true
+        }
+      });
+      map.on('mouseenter', 'bus1_Route4Bus1', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+      });
+      map.on('mouseleave', 'bus1_Route4Bus1', () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+      function bus1_Route4Bus1_animate() {
+        const bus1_Route4Bus1_start =
+          map1_Route4.features[0].geometry.coordinates[
+          bus1_Route4Bus1_counter >= bus1_Route4Bus1_steps ? bus1_Route4Bus1_counter - 1 : bus1_Route4Bus1_counter
+          ];
+        const bus1_Route4Bus1_end =
+          map1_Route4.features[0].geometry.coordinates[
+          bus1_Route4Bus1_counter >= bus1_Route4Bus1_steps ? bus1_Route4Bus1_counter : bus1_Route4Bus1_counter + 1
+          ];
+        if (!bus1_Route4Bus1_start || !bus1_Route4Bus1_end) return;
+        bus1_Route4Bus1.features[0].geometry.coordinates =
+          map1_Route4.features[0].geometry.coordinates[bus1_Route4Bus1_counter];
+        map.getSource('bus1_Route4Bus1').setData(bus1_Route4Bus1);
+
+        if (bus1_Route4Bus1_counter < bus1_Route4Bus1_steps) {
+          requestAnimationFrame(bus1_Route4Bus1_animate);
+        }
+
+        bus1_Route4Bus1_counter = bus1_Route4Bus1_counter + 1;
+        if (bus1_Route4Bus1_counter <= 300 && bus1_Route4Bus1_counter >= 150) {
+          map.setPaintProperty('bus1_Route4Bus1_battery', 'circle-color', batteryColor[1])
+        }
+        else if (bus1_Route4Bus1_counter >= 300) {
+          map.setPaintProperty('bus1_Route4Bus1_battery', 'circle-color', batteryColor[2])
+        } else {
+          map.setPaintProperty('bus1_Route4Bus1_battery', 'circle-color', batteryColor[0])
+        }
+      }
+      document.getElementById('Bus 1 Route 4-1').addEventListener('click', () => {
+        bus1_Route4Bus1.features[0].geometry.coordinates = origin;
+        map.getSource('bus1_Route4Bus1').setData(bus1_Route4Bus1);
+        bus1_Route4Bus1_counter = 0;
+        bus1_Route4Bus1_animate(bus1_Route4Bus1_counter);
+      });
+
+      map.addSource('bus1_Route4Bus2', {
+        'type': 'geojson',
+        'data': bus1_Route4Bus2
+      });
+      map.addLayer({
+        'id': 'bus1_Route4Bus2_battery',
+        'source': 'bus1_Route4Bus2',
+        'type': 'circle',
+        "minzoom": 10,
+        'paint': {
+          'circle-color': batteryColor[0],
+          'circle-opacity': 1,
+          'circle-radius': 13,
+        }
+      });
+      map.addLayer({
+        'id': 'bus1_Route4Bus2',
+        'source': 'bus1_Route4Bus2',
+        'type': 'symbol',
+        "minzoom": 10,
+        'layout': {
+          'icon-image': '1Asset 4',
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-size': 1,
+          'icon-ignore-placement': true
+        }
+      });
+      map.on('mouseenter', 'bus1_Route4Bus2', (e) => {
+        map.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+      });
+      map.on('mouseleave', 'bus1_Route4Bus2', () => {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+      function bus1_Route4Bus2_animate() {
+        const start =
+          map1_Route4.features[0].geometry.coordinates[
+          bus1_Route4Bus2_counter >= bus1_Route4Bus2_steps ? bus1_Route4Bus2_counter - 1 : bus1_Route4Bus2_counter
+          ];
+        const end =
+          map1_Route4.features[0].geometry.coordinates[
+          bus1_Route4Bus2_counter >= bus1_Route4Bus2_steps ? bus1_Route4Bus2_counter : bus1_Route4Bus2_counter + 1
+          ];
+        if (!start || !end) return;
+        bus1_Route4Bus2.features[0].geometry.coordinates =
+          map1_Route4.features[0].geometry.coordinates[bus1_Route4Bus2_counter];
+        map.getSource('bus1_Route4Bus2').setData(bus1_Route4Bus2);
+
+        if (bus1_Route4Bus2_counter < bus1_Route4Bus2_steps) {
+          requestAnimationFrame(bus1_Route4Bus2_animate);
+        }
+
+        bus1_Route4Bus2_counter = bus1_Route4Bus2_counter + 1;
+        if (bus1_Route4Bus2_counter <= 1400 && bus1_Route4Bus2_counter >= 660) {
+          map.setPaintProperty('bus1_Route4Bus2_battery', 'circle-color', batteryColor[1])
+        }
+        else if (bus1_Route4Bus2_counter >= 1400) {
+          map.setPaintProperty('bus1_Route4Bus2_battery', 'circle-color', batteryColor[2])
+        } else {
+          map.setPaintProperty('bus1_Route4Bus2_battery', 'circle-color', batteryColor[0])
+        }
+      }
+      document.getElementById('Bus 1 Route 4-2').addEventListener('click', () => {
+        bus1_Route4Bus2.features[0].geometry.coordinates = origin;
+        map.getSource('bus1_Route4Bus2').setData(bus1_Route4Bus2);
+        bus1_Route4Bus2_counter = 0;
+        bus1_Route4Bus2_animate(bus1_Route4Bus2_counter);
+      });
+
+      if (map.getLayer('Map 1 Contours') && map.getLayer('Map 1 All Bus Routes') && map.getLayer('Map 1 Route 4 Main Stops') && map.getLayer('Map 1 All Bus Stops')) {
+        var toggleableLayerIds = ['Map 1 Contours', 'Map 1 All Bus Routes', 'Map 1 Route 4 Main Stops', 'Map 1 All Bus Stops'];
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+          var id = toggleableLayerIds[i];
+          if (!document.getElementById(id)) {
+            // Create a link.
+            var link = document.createElement('a');
+            link.id = id;
+            link.href = '#';
+            link.textContent = id;
+            link.className = 'active';
+            link.onclick = function (e) {
+              var clickedLayer = this.textContent;
+              e.preventDefault();
+              e.stopPropagation();
+
+              var visibility = map.getLayoutProperty(
+                clickedLayer,
+                'visibility'
+              );
+
+              // Toggle layer visibility by changing the layout object's visibility property.
+              if (visibility === 'visible') {
+                map.setLayoutProperty(
+                  clickedLayer,
+                  'visibility',
+                  'none'
+                );
+                this.className = '';
+              } else {
+                this.className = 'active';
+                map.setLayoutProperty(
+                  clickedLayer,
+                  'visibility',
+                  'visible'
+                );
+              }
+            };
+
+            var layers = document.getElementById('menu');
+            layers.appendChild(link);
+          }
+        }
+      }
+
+
+      var colors = ["#ffc34a", "#ff894a", "#ff4a4a"];
+
+      // set the dimensions and margins of the graph
+      var margin = { top: 30, right: 60, bottom: 70, left: 30 },
+        width = innerWidth - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3.select("#figure6A")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+      // Parse the Data
+      d3.csv("https://raw.githubusercontent.com/graceyuanjq/CUTRIC_BURLINGTON/main/Figure%209%20A.csv", function (data) {
+
+        // X axis
+        var x = d3.scaleBand()
+          .range([0, width])
+          .domain(data.map(function (d) { return d.bus; }))
+          .padding(0.2);
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("y", 0)
+          .attr("x", 9)
+          .attr("dy", ".35em")
+          .attr("transform", "translate(-10,0)")
+          .attr("transform", "rotate(90)")
+          .style("text-anchor", "start")
+          .attr("stroke", "#ffffff");
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain([0, 600])
+          .range([height, 0]);
+        svg.append("g")
+          .call(d3.axisLeft(y))
+          .attr("stroke", "#ffffff")
+          .selectAll("text")
+          .attr("stroke", "#ffffff");
+
+        // Bars
+        svg.selectAll("rect")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("x", function (d) { return x(d.bus); })
+          .attr("y", function (d) { return y(d.total); })
+          .attr("width", x.bandwidth())
+          .attr("height", function (d) { return height - y(d.total); })
+          .attr("fill", "#94c8ff")
+          .on("click", function (d) {
+            d3.select(this).attr("stroke", "#ffffff").attr("stroke-width", 2)
+            console.log(d.bus)
+            if (d.bus === " 4-2") {
+              bus1_Route4Bus2.features[0].geometry.coordinates = origin;
+              map.getSource('bus1_Route4Bus2').setData(bus1_Route4Bus2);
+              bus1_Route4Bus2_counter = 0;
+              bus1_Route4Bus2_animate(bus1_Route4Bus2_counter);
+            } else {
+
+            }
+            if (d.bus === " 4-1") {
+              bus1_Route4Bus1.features[0].geometry.coordinates = origin;
+              map.getSource('bus1_Route4Bus1').setData(bus1_Route4Bus1);
+              bus1_Route4Bus1_counter = 0;
+              bus1_Route4Bus1_animate(bus1_Route4Bus1_counter);
+            } else {
+
+            }
+          })
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.light); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[0])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.medium); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[1])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.heavy); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[2])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+      });
+
+    });
+
+
+    map2.on('load', function () {
+      var nav = new mapboxgl.NavigationControl();
+      map2.addControl(nav, 'bottom-right');
+      map2.addSource('Contours', {
+        type: 'vector',
+        url: 'mapbox://mapbox.mapbox-terrain-v2'
+      });
+      map2.addLayer({
+        'id': 'Map 2 Contours',
+        'type': 'line',
+        'source': 'Contours',
+        'source-layer': 'contour',
+        'layout': {
+          // Make the layer visible by default.
+          'visibility': 'visible',
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#877b59',
+          'line-width': 1
+        }
+      });
+      map2.addSource('All Routes2', {
+        "url": "mapbox://graceyuan.ckrxk0lzh0bh527lgxma2fwwo-89q4u",
+        "type": "vector"
+      });
+      map2.addLayer({
+        'id': 'Map 2 All Bus Routes',
+        'type': 'circle',
+        'source': 'All Routes2',
+        "minzoom": 10,
+
+        'source-layer': 'Burlington_Shape',
+        'layout': {
+          // Make the layer visible by default.
+          'visibility': 'none'
+        },
+        'paint': {
+          'circle-color': '#8296f3',
+          'circle-opacity': 0.75,
+          'circle-radius': 3
+        }
+      });
+      map2.addSource('All Stops2', {
+        "url": "mapbox://graceyuan.ckrwt41m305e221rv6u11kugr-20yrv",
+        "type": "vector"
+      });
+      map2.addLayer({
+        'id': 'Map 2 All Bus Stops',
+        'type': 'symbol',
+        'icon-size': 0.6,
+        'source': 'All Stops2',
+        "minzoom": 10,
+        'source-layer': 'Burlington_Bus_Stops',
+        'layout': {
+          'visibility': 'none',
+          'icon-image': 'bus',
+          'icon-allow-overlap': true
+        }
+      });
+      map2.addSource('map2_Route4', {
+        'type': 'geojson',
+        'data': map2_Route4
+      });
+      map2.addLayer({
+        'id': 'map2_Route4',
+        'source': 'map2_Route4',
+        'type': 'line',
+        'paint': {
+          'line-width': 4,
+          'line-color': '#c180ff'
+        },
+        "minzoom": 10
+      });
+      map2.addSource('route4MainStops2', {
+        'type': 'geojson',
+        'data': route4MainStops
+      });
+      map2.addLayer({
+        'id': 'Map 2 Route 4 Main Stops',
+        'type': 'symbol',
+        'icon-size': 0.6,
+        "minzoom": 10,
+        'source': 'route4MainStops2',
+        'layout': {
+          'icon-image': '{icon}',
+          'icon-allow-overlap': true
+        }
+      });
+      map2.on('mouseenter', 'Map 2 Route 4 Main Stops', function (e) {
+        map2.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map2);
+      });
+      map2.on('mouseleave', 'Map 2 Route 4 Main Stops', () => {
+        map2.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+
+      map2.addSource('chargerLocations', {
+        'type': 'geojson',
+        'data': chargerLocations
+      });
+      map2.addLayer({
+        'id': 'chargerLocations',
+        'type': 'symbol',
+        'icon-size': 1,
+        "minzoom": 10,
+        'source': 'chargerLocations',
+        'layout': {
+          'icon-image': '{icon}',
+          'icon-allow-overlap': true
+        }
+      });
+      map2.on('mouseenter', 'chargerLocations', function (e) {
+        map2.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map2);
+      });
+      map2.on('mouseleave', 'chargerLocations', () => {
+        map2.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+
+      map2.addSource('bus2_Route4Bus1', {
+        'type': 'geojson',
+        'data': bus2_Route4Bus1
+      });
+      map2.addLayer({
+        'id': 'bus2_Route4Bus1_battery',
+        'source': 'bus2_Route4Bus1',
+        'type': 'circle',
+        "minzoom": 10,
+        'paint': {
+          'circle-color': batteryColor[0],
+          'circle-opacity': 1,
+          'circle-radius': 13,
+        }
+      });
+      map2.addLayer({
+        'id': 'bus2_Route4Bus1',
+        'source': 'bus2_Route4Bus1',
+        'type': 'symbol',
+        "minzoom": 10,
+        'layout': {
+          'icon-image': '1Asset 4',
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-size': 1,
+          'icon-ignore-placement': true
+        }
+      });
+      map2.on('mouseenter', 'bus2_Route4Bus1', (e) => {
+        map2.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map2);
+      });
+      map2.on('mouseleave', 'bus2_Route4Bus2', () => {
+        map2.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+
+      map2.addSource('bus2_Route4Bus2', {
+        'type': 'geojson',
+        'data': bus2_Route4Bus2
+      });
+      map2.addLayer({
+        'id': 'bus2_Route4Bus2_battery',
+        'source': 'bus2_Route4Bus2',
+        'type': 'circle',
+        "minzoom": 10,
+        'paint': {
+          'circle-color': batteryColor[0],
+          'circle-opacity': 1,
+          'circle-radius': 13,
+        }
+      });
+      map2.addLayer({
+        'id': 'bus2_Route4Bus2',
+        'source': 'bus2_Route4Bus2',
+        'type': 'symbol',
+        "minzoom": 10,
+        'layout': {
+          'icon-image': '1Asset 4',
+          'icon-rotation-alignment': 'map',
+          'icon-allow-overlap': true,
+          'icon-size': 1,
+          'icon-ignore-placement': true
+        }
+      });
+      map2.on('mouseenter', 'bus2_Route4Bus2', (e) => {
+        map2.getCanvas().style.cursor = 'pointer';
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.description;
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        popup.setLngLat(coordinates).setHTML(description).addTo(map2);
+      });
+      map2.on('mouseleave', 'bus2_Route4Bus2', () => {
+        map2.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+
+      function bus2_Route4Bus1_animate() {
+        const bus2_Route4Bus1_start =
+          map2_Route4.features[0].geometry.coordinates[
+          bus2_Route4Bus1_counter >= bus2_Route4Bus1_steps ? bus2_Route4Bus1_counter - 1 : bus2_Route4Bus1_counter
+          ];
+        const bus2_Route4Bus1_end =
+          map2_Route4.features[0].geometry.coordinates[
+          bus2_Route4Bus1_counter >= bus2_Route4Bus1_steps ? bus2_Route4Bus1_counter : bus2_Route4Bus1_counter + 1
+          ];
+        if (!bus2_Route4Bus1_start || !bus2_Route4Bus1_end) return;
+        bus2_Route4Bus1.features[0].geometry.coordinates =
+          map2_Route4.features[0].geometry.coordinates[bus2_Route4Bus1_counter];
+        map2.getSource('bus2_Route4Bus1').setData(bus2_Route4Bus1);
+        if (bus2_Route4Bus1_counter < bus2_Route4Bus1_steps) {
+          requestAnimationFrame(bus2_Route4Bus1_animate);
+        }
+        bus2_Route4Bus1_counter = bus2_Route4Bus1_counter + 1;
+        if (bus2_Route4Bus1_counter <= 1000 && bus2_Route4Bus1_counter >= 500) {
+          map2.setPaintProperty('bus2_Route4Bus1_battery', 'circle-color', batteryColor[1])
+        }
+        else if (bus2_Route4Bus1_counter >= 1000) {
+          map2.setPaintProperty('bus2_Route4Bus1_battery', 'circle-color', batteryColor[2])
+        } else {
+          map2.setPaintProperty('bus2_Route4Bus1_battery', 'circle-color', batteryColor[0])
+        }
+      }
+      document.getElementById('Bus 2 Route 4-1').addEventListener('click', () => {
+        bus2_Route4Bus1.features[0].geometry.coordinates = origin;
+        map2.getSource('bus2_Route4Bus1').setData(bus2_Route4Bus1);
+        bus2_Route4Bus1_counter = 0;
+        bus2_Route4Bus1_animate(bus2_Route4Bus1_counter);
+      });
+
+      function bus2_Route4Bus2_animate() {
+        const bus2_Route4Bus2_start =
+          map2_Route4.features[0].geometry.coordinates[
+          bus2_Route4Bus2_counter >= bus2_Route4Bus2_steps ? bus2_Route4Bus2_counter - 1 : bus2_Route4Bus2_counter
+          ];
+        const bus2_Route4Bus2_end =
+          map2_Route4.features[0].geometry.coordinates[
+          bus2_Route4Bus2_counter >= bus2_Route4Bus2_steps ? bus2_Route4Bus2_counter : bus2_Route4Bus2_counter + 1
+          ];
+        if (!bus2_Route4Bus2_start || !bus2_Route4Bus2_end) return;
+        bus2_Route4Bus2.features[0].geometry.coordinates =
+          map2_Route4.features[0].geometry.coordinates[bus2_Route4Bus2_counter];
+        map2.getSource('bus2_Route4Bus2').setData(bus2_Route4Bus2);
+        if (bus2_Route4Bus2_counter < bus2_Route4Bus2_steps) {
+          requestAnimationFrame(bus2_Route4Bus2_animate);
+        }
+        bus2_Route4Bus2_counter = bus2_Route4Bus2_counter + 1;
+        if (bus2_Route4Bus2_counter <= 1000 && bus2_Route4Bus2_counter >= 500) {
+          map2.setPaintProperty('bus2_Route4Bus2_battery', 'circle-color', batteryColor[1])
+        }
+        else if (bus2_Route4Bus2_counter >= 1000) {
+          map2.setPaintProperty('bus2_Route4Bus2_battery', 'circle-color', batteryColor[2])
+        } else {
+          map2.setPaintProperty('bus2_Route4Bus2_battery', 'circle-color', batteryColor[0])
+        }
+      }
+      document.getElementById('Bus 2 Route 4-2').addEventListener('click', () => {
+        bus2_Route4Bus2.features[0].geometry.coordinates = origin;
+        map2.getSource('bus2_Route4Bus2').setData(bus2_Route4Bus2);
+        bus2_Route4Bus2_counter = 0;
+        bus2_Route4Bus2_animate(bus2_Route4Bus2_counter);
+      });
+
+      if (map2.getLayer('Map 2 Contours') && map2.getLayer('Map 2 All Bus Routes') && map2.getLayer('Map 2 Route 4 Main Stops') && map2.getLayer('Map 2 All Bus Stops')) {
+        var toggleableLayerIds = ['Map 2 Contours', 'Map 2 All Bus Routes', 'Map 2 Route 4 Main Stops', 'Map 2 All Bus Stops'];
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+          var id = toggleableLayerIds[i];
+          if (!document.getElementById(id)) {
+            var link = document.createElement('a');
+            link.id = id;
+            link.href = '#';
+            link.textContent = id;
+            link.className = 'active';
+            link.onclick = function (e) {
+              var clickedLayer = this.textContent;
+              e.preventDefault();
+              e.stopPropagation();
+
+              var visibility = map2.getLayoutProperty(
+                clickedLayer,
+                'visibility'
+              );
+              if (visibility === 'visible') {
+                map2.setLayoutProperty(
+                  clickedLayer,
+                  'visibility',
+                  'none'
+                );
+                this.className = '';
+              } else {
+                this.className = 'active';
+                map2.setLayoutProperty(
+                  clickedLayer,
+                  'visibility',
+                  'visible'
+                );
+              }
+            };
+
+            var layers = document.getElementById('menu2');
+            layers.appendChild(link);
+          }
+        }
+      }
+
+      var colors = ["#ffc34a", "#ff894a", "#ff4a4a"];
+
+      // set the dimensions and margins of the graph
+      var margin = { top: 30, right: 60, bottom: 70, left: 30 },
+        width = innerWidth - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3.select("#figure7A")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+      // Parse the Data
+      d3.csv("https://raw.githubusercontent.com/graceyuanjq/CUTRIC_BURLINGTON/main/Figure%209%20A.csv", function (data) {
+
+        // X axis
+        var x = d3.scaleBand()
+          .range([0, width])
+          .domain(data.map(function (d) { return d.bus; }))
+          .padding(0.2);
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .attr("y", 0)
+          .attr("x", 9)
+          .attr("dy", ".35em")
+          .attr("transform", "translate(-10,0)")
+          .attr("transform", "rotate(90)")
+          .style("text-anchor", "start")
+          .attr("stroke", "#ffffff");
+
+        // Add Y axis
+        var y = d3.scaleLinear()
+          .domain([0, 600])
+          .range([height, 0]);
+        svg.append("g")
+          .call(d3.axisLeft(y))
+          .attr("stroke", "#ffffff")
+          .selectAll("text")
+          .attr("stroke", "#ffffff");
+
+        // Bars
+        svg.selectAll("rect")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("x", function (d) { return x(d.bus); })
+          .attr("y", function (d) { return y(d.total); })
+          .attr("width", x.bandwidth())
+          .attr("height", function (d) { return height - y(d.total); })
+          .attr("fill", "#94c8ff")
+          .on("click", function (d) {
+            d3.select(this).attr("stroke", "#ffffff").attr("stroke-width", 2)
+            console.log(d.bus)
+            if (d.bus === " 4-2") {
+              bus2_Route4Bus2.features[0].geometry.coordinates = origin;
+              map2.getSource('bus2_Route4Bus2').setData(bus2_Route4Bus2);
+              bus2_Route4Bus2_counter = 0;
+              bus2_Route4Bus2_animate(bus2_Route4Bus2_counter);
+            } else {
+
+            }
+            if (d.bus === " 4-1") {
+              bus2_Route4Bus1.features[0].geometry.coordinates = origin;
+              map2.getSource('bus2_Route4Bus1').setData(bus2_Route4Bus1);
+              bus2_Route4Bus1_counter = 0;
+              bus2_Route4Bus1_animate(bus2_Route4Bus1_counter);
+            } else {
+
+            }
+          })
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.light); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[0])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.medium); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[1])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+        svg.append("path")
+          .datum(data)
+          .attr("d", d3.line()
+            .x(function (d) { return x(d.bus) + x.bandwidth() / 2; })
+            .y(function (d) { return y(d.heavy); }))
+          .attr("fill", "none")
+          .attr("stroke", colors[2])
+          .attr("stroke-miterlimit", 1)
+          .attr("stroke-width", 3)
+
+      });
+    });
+
+    function addMarkers() {
+      /* For each feature in the GeoJSON object above: */
+      for (const marker of cities.features) {
+        /* Create a div element for the marker. */
+        const el = document.createElement('div');
+        /* Assign a unique `id` to the marker. */
+        el.id = `marker-${marker.properties.id}`;
+        /* Assign the `marker` class to each marker for styling. */
+        el.className = 'marker';
+
+        /**
+         * Create a marker using the div element
+         * defined above and add it to the map.
+         **/
+        new mapboxgl.Marker(el, { offset: [0, -23] })
+          .setLngLat(marker.geometry.coordinates)
+          .addTo(map);
+
+        /**
+         * Listen to the element and when it is clicked, do three things:
+         * 1. Fly to the point
+         * 2. Close all other popups and display popup for clicked city
+         * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+         **/
+        el.addEventListener('click', (e) => {
+          /* Fly to the point */
+          flyTocity(marker);
+          /* Close all other popups and display popup for clicked city */
+          createPopUp(marker);
+          /* Highlight listing in sidebar */
+          const activeItem = document.getElementsByClassName('active');
+          e.stopPropagation();
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          }
+          const listing = document.getElementById(
+            `listing-${marker.properties.id}`
+          );
+          listing.classList.add('active');
+        });
+      }
+    }
+
+    /**
+     * Add a listing for each city to the sidebar.
+     **/
+    function buildLocationList(cities) {
+      for (const city of cities.features) {
+        /* Add a new listing section to the sidebar. */
+        const listings = document.getElementById('listings');
+        const listing = listings.appendChild(document.createElement('div'));
+        /* Assign a unique `id` to the listing. */
+        listing.id = `listing-${city.properties.id}`;
+        /* Assign the `item` class to each listing for styling. */
+        listing.className = 'item';
+
+        /* Add the link to the individual listing created above. */
+        const link = listing.appendChild(document.createElement('a'));
+        link.href = '#';
+        link.className = 'title';
+        link.id = `link-${city.properties.id}`;
+        link.innerHTML = `${city.properties.description}`;
+
+        /* Add details to the individual listing. */
+        const details = listing.appendChild(document.createElement('div'));
+        // details.innerHTML = `${city.properties.city}`;
+
+        /**
+         * Listen to the element and when it is clicked, do four things:
+         * 1. Update the `currentFeature` to the city associated with the clicked link
+         * 2. Fly to the point
+         * 3. Close all other popups and display popup for clicked city
+         * 4. Highlight listing in sidebar (and remove highlight for all other listings)
+         **/
+        link.addEventListener('click', function () {
+          for (const feature of cities.features) {
+            if (this.id === `link-${feature.properties.id}`) {
+              flyTocity(feature);
+              createPopUp(feature);
+            }
+          }
+          const activeItem = document.getElementsByClassName('active');
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          }
+          this.parentNode.classList.add('active');
+        });
+      }
+    }
+
+    function flyTocity(currentFeature) {
+      map.flyTo({
+        center: currentFeature.geometry.coordinates,
+        zoom: 11.5
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

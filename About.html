@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <style>
+    @font-face {
+      font-family: workSansBold;
+      src: url(./fonts/WorkSans-Bold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansExtraBold;
+      src: url(./fonts/WorkSans-ExtraBold.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansMedium;
+      src: url(./fonts/WorkSans-Medium.ttf);
+    }
+  
+    @font-face {
+      font-family: workSansRegular;
+      src: url(./fonts/WorkSans-Regular.ttf);
+    }
+
+    .topnav {
+      overflow: hidden;
+      position: fixed;
+      right: 18px;
+      top:0px;
+      z-index: 200;
+    }
+
+    .topnav a {
+      float: left;
+      color: #6e6e6e;
+      text-align: center;
+      padding: 16px 18px;
+      text-decoration: none;
+      font-size: 14px;
+      font-family: 'workSansRegular';
+    }
+
+    .topnav a:hover {
+      color: rgb(65, 102, 202);
+    }
+
+    .topnav a.active {
+      color: rgb(59, 78, 163);
+      font-weight: bold;
+    }
+
+    h1 {
+      position: relative;
+      top:80px;
+      color: rgb(255, 255, 255);
+      font-family: 'workSansRegular';
+      font-size: 20px;
+      width: 70%;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h2 {
+      top:80px;
+      position: relative;
+      color: #268bff;
+      font-family: 'workSansBold';
+      font-size: 38px;
+      text-align: center;
+    }
+
+
+    h5 {
+      color: rgb(0, 0, 0);
+      font-family: 'workSansBold';
+      font-size: 18px;
+      left: 50px;
+      position: relative;
+      bottom: 5px;
+      line-height: 0;
+    }
+
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color:#202020;
+      padding-bottom: 100px;
+    }
+
+    #header{
+      position:fixed;
+      background-color: white;
+      height: 50px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      fill: black;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .logo {
+      position: absolute;
+      padding: 5px;
+      max-height: 40px;
+      float: left;
+      width: 33.4px;
+      height: 48.3px;
+    }
+
+    .charts{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+    .chart1{
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      top:30px;
+    }
+
+    .chart2{
+      top:80px;
+      bottom: 0;
+      width: 100%;
+      z-index: 10; 
+      position: relative;
+      padding: 20px;
+      height: 500px;
+      border-radius: 10px;
+      margin-bottom: 60px;
+      float: right;
+    }
+
+    .container{
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 40px;
+    }
+
+    .bio{
+      width: 100%;
+      height: auto;
+      position:relative;
+      margin-left:auto;
+      margin-right: auto;
+      bottom: 10px;
+      top:50px;
+    }
+    .icon{
+      width: 4%;
+      height: auto;
+      position:relative;
+      left:48%;
+      top:80px;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+  <div id='header'>
+    <img class="logo" src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
+    <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
+  </div>
+  <!-- Nav bar -->
+  <div class="topnav">
+    <a href="Landing.html">Cities</a>
+    <a href="SimulationResults.html">Simulation Results</a>
+    <a href="GHGEmissionsAnalysis.html">GHG Emissions Analysis</a>
+    <a href="ElectricityCostEstimation.html">Electricity Cost Estimation</a>
+    <a class="active" href="#a">About</a>
+    <a href="Contact.html">Contact</a>
+  </div>
+  <img class="bio" src="./images/About image.png" alt="CUTRIC About">
+
+  <h2>About Us</h2>
+
+  <div class="container">
+    <h1>The Canadian Urban Transit Research & Innovation Consortium (CUTRIC) is a socially responsible non-profit organization that spearheads, designs, and launches technology and commercialization projects that advance next-generation zero-carbon mobility and transportation solutions across Canada. 
+      <p/>It also develops low-cost simulation tools that help transit agencies across Canada and the United States predict how their electric buses, hydrogen fuel cell buses and autonomous smart vehicles (for first kilometre/last kilometre solutions) will operate in real-time on roads and in service.
+    </h1>
+
+  </div>
+
+
+</body>
+
+</html>

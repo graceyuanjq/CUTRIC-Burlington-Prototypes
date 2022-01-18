@@ -1,0 +1,10 @@
+name,Demand charge portion,No diesel heater,With diesel heater,Diesel
+Diesel Bus,0,0,0,150000
+Bus #1(smart) ,30000,105000,0,0
+Bus #2(smart) ,30000,100000,0,0
+Bus #1(smart) Heater,29000,0,105000,0
+Bus #2(smart) Heater,28000,0,103000,0
+Bus #1(non-smart) ,59000,105000,0,0
+Bus #2(non-smart) ,59000,103000,0,0
+Bus #1(non-smart) Heater,59000,0,120000,0
+Bus #2(non-smart) Heater,59000,0,115000,0
