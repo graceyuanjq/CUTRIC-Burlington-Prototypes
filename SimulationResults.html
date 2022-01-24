@@ -125,7 +125,15 @@
       font-family: sans-serif;
       padding: 5px;
     }
-    .overlay {
+    #overlay {
+      position: absolute;
+      top: 300px;
+      left: 0px;
+      background: #efefef;
+      padding: 10px;
+      font-family: sans-serif;
+}
+    /* #overlay {
       position: absolute;
       width: 100px;
       top: 300px;
@@ -133,7 +141,7 @@
       border: 1px solid rgba(0, 0, 0, 0.4);
     }
 
-    .overlay button {
+    #overlay button {
       font-family: sans-serif;
       background-color: #268bff;
       font-size: 12px;
@@ -149,11 +157,11 @@
       text-align: left;
     }
 
-    .overlay button:hover {
+    #overlay button:hover {
       background-color: #0f428a;
     }
 
-    .overlay2 {
+    #overlay2 {
       position: absolute;
       width: 100px;
       top: 300px;
@@ -162,7 +170,7 @@
       border: 1px solid rgba(0, 0, 0, 0.4);
     }
 
-    .overlay2 button {
+    #overlay2 button {
       font-family: sans-serif;
       font-size: 12px;
       background-color: #268bff;
@@ -178,9 +186,9 @@
       text-align: left;
     }
 
-    .overlay2 button:hover {
+    #overlay2 button:hover {
       background-color: #0f428a;
-    }
+    } */
 
     #menu {
       position: absolute;
@@ -524,15 +532,7 @@
   <nav id="menu2" class='menu2'></nav>
   <div id='map'></div>
   <div id='map2'></div>
-  <div class="overlay">
-    <button id="Bus 1 Route 4-1">Bus #1 4-1</button>
-    <button id="Bus 1 Route 4-2">Bus #1 4-2</button>
-  </div>
-  <div class="overlay2">
-    <button id="Bus 2 Route 4-1">Bus #2 4-1</button>
-    <button id="Bus 2 Route 4-2">Bus #2 4-2</button>
 
-  </div>
   <div id=dropDownBar></div>
   <div class="dropDown">
     <select id="target">
@@ -1794,6 +1794,16 @@
           'line-width': 1
         }
       });
+      map.addLayer({
+        'id': 'Map 1 Hillshade',
+        'source': 'Contours',
+        'source-layer': 'hillshade',
+        "type": "fill",
+        "paint": {
+          "fill-color": "rgba(66,100,251, 0.3)",
+          "fill-outline-color": "rgba(66,100,251, 1)"
+        }
+      });
       map.addSource('All Routes', {
         "url": "mapbox://graceyuan.ckrxk0lzh0bh527lgxma2fwwo-89q4u",
         "type": "vector"
@@ -1843,6 +1853,9 @@
           'line-width': 4,
           'line-color': '#c180ff'
         },
+        'layout': {
+          'visibility': 'none'
+        },
         "minzoom": 10
       });
       map.addSource('route4MainStops', {
@@ -1857,7 +1870,8 @@
         'source': 'route4MainStops',
         'layout': {
           'icon-image': '{icon}',
-          'icon-allow-overlap': true
+          'icon-allow-overlap': true,
+          'visibility': 'none'
         }
       });
       map.on('mouseenter', 'Map 1 Route 4 Main Stops', function (e) {
@@ -1981,12 +1995,7 @@
           map.setPaintProperty('bus1_Route4Bus1_battery', 'circle-color', batteryColor[0])
         }
       }
-      document.getElementById('Bus 1 Route 4-1').addEventListener('click', () => {
-        bus1_Route4Bus1.features[0].geometry.coordinates = origin;
-        map.getSource('bus1_Route4Bus1').setData(bus1_Route4Bus1);
-        bus1_Route4Bus1_counter = 0;
-        bus1_Route4Bus1_animate(bus1_Route4Bus1_counter);
-      });
+
 
       map.addSource('bus1_Route4Bus2', {
         'type': 'geojson',
@@ -2057,15 +2066,9 @@
           map.setPaintProperty('bus1_Route4Bus2_battery', 'circle-color', batteryColor[0])
         }
       }
-      document.getElementById('Bus 1 Route 4-2').addEventListener('click', () => {
-        bus1_Route4Bus2.features[0].geometry.coordinates = origin;
-        map.getSource('bus1_Route4Bus2').setData(bus1_Route4Bus2);
-        bus1_Route4Bus2_counter = 0;
-        bus1_Route4Bus2_animate(bus1_Route4Bus2_counter);
-      });
 
-      if (map.getLayer('Map 1 Contours') && map.getLayer('Map 1 All Bus Routes') && map.getLayer('Map 1 Route 4 Main Stops') && map.getLayer('Map 1 All Bus Stops')) {
-        var toggleableLayerIds = ['Map 1 Contours', 'Map 1 All Bus Routes', 'Map 1 Route 4 Main Stops', 'Map 1 All Bus Stops'];
+      if (map.getLayer('Map 1 Contours') && map.getLayer('Map 1 Hillshade') && map.getLayer('Map 1 All Bus Routes') && map.getLayer('Map 1 All Bus Stops')) {
+        var toggleableLayerIds = ['Map 1 Contours', 'Map 1 Hillshade', 'Map 1 All Bus Routes', 'Map 1 All Bus Stops'];
         for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
           if (!document.getElementById(id)) {
@@ -2136,6 +2139,7 @@
           .padding(0.2);
         svg.append("g")
           .attr("transform", "translate(0," + height + ")")
+          .attr("stroke", "#ffffff")
           .call(d3.axisBottom(x))
           .selectAll("text")
           .attr("y", 0)
@@ -2174,6 +2178,8 @@
               map.getSource('bus1_Route4Bus2').setData(bus1_Route4Bus2);
               bus1_Route4Bus2_counter = 0;
               bus1_Route4Bus2_animate(bus1_Route4Bus2_counter);
+              map.setLayoutProperty('Map 1 Route 4 Main Stops', 'visibility', 'visible');
+              map.setLayoutProperty('map1_Route4', 'visibility', 'visible');
             } else {
 
             }
@@ -2182,6 +2188,8 @@
               map.getSource('bus1_Route4Bus1').setData(bus1_Route4Bus1);
               bus1_Route4Bus1_counter = 0;
               bus1_Route4Bus1_animate(bus1_Route4Bus1_counter);
+              map.setLayoutProperty('Map 1 Route 4 Main Stops', 'visibility', 'visible');
+              map.setLayoutProperty('map1_Route4', 'visibility', 'visible');
             } else {
 
             }
@@ -2246,6 +2254,16 @@
           'line-width': 1
         }
       });
+      map2.addLayer({
+        'id': 'Map 2 Hillshade',
+        'source': 'Contours',
+        'source-layer': 'hillshade',
+        "type": "fill",
+        "paint": {
+          "fill-color": "rgba(66,100,251, 0.3)",
+          "fill-outline-color": "rgba(66,100,251, 1)"
+        }
+      });
       map2.addSource('All Routes2', {
         "url": "mapbox://graceyuan.ckrxk0lzh0bh527lgxma2fwwo-89q4u",
         "type": "vector"
@@ -2292,6 +2310,9 @@
         'id': 'map2_Route4',
         'source': 'map2_Route4',
         'type': 'line',
+        'layout': {
+          'visibility': 'none'
+        },
         'paint': {
           'line-width': 4,
           'line-color': '#c180ff'
@@ -2310,7 +2331,8 @@
         'source': 'route4MainStops2',
         'layout': {
           'icon-image': '{icon}',
-          'icon-allow-overlap': true
+          'icon-allow-overlap': true,
+          'visibility':'none',
         }
       });
       map2.on('mouseenter', 'Map 2 Route 4 Main Stops', function (e) {
@@ -2466,12 +2488,6 @@
           map2.setPaintProperty('bus2_Route4Bus1_battery', 'circle-color', batteryColor[0])
         }
       }
-      document.getElementById('Bus 2 Route 4-1').addEventListener('click', () => {
-        bus2_Route4Bus1.features[0].geometry.coordinates = origin;
-        map2.getSource('bus2_Route4Bus1').setData(bus2_Route4Bus1);
-        bus2_Route4Bus1_counter = 0;
-        bus2_Route4Bus1_animate(bus2_Route4Bus1_counter);
-      });
 
       function bus2_Route4Bus2_animate() {
         const bus2_Route4Bus2_start =
@@ -2499,15 +2515,9 @@
           map2.setPaintProperty('bus2_Route4Bus2_battery', 'circle-color', batteryColor[0])
         }
       }
-      document.getElementById('Bus 2 Route 4-2').addEventListener('click', () => {
-        bus2_Route4Bus2.features[0].geometry.coordinates = origin;
-        map2.getSource('bus2_Route4Bus2').setData(bus2_Route4Bus2);
-        bus2_Route4Bus2_counter = 0;
-        bus2_Route4Bus2_animate(bus2_Route4Bus2_counter);
-      });
 
-      if (map2.getLayer('Map 2 Contours') && map2.getLayer('Map 2 All Bus Routes') && map2.getLayer('Map 2 Route 4 Main Stops') && map2.getLayer('Map 2 All Bus Stops')) {
-        var toggleableLayerIds = ['Map 2 Contours', 'Map 2 All Bus Routes', 'Map 2 Route 4 Main Stops', 'Map 2 All Bus Stops'];
+      if (map2.getLayer('Map 2 Contours') &&  map2.getLayer('Map 2 Hillshade') && map2.getLayer('Map 2 All Bus Routes') && map2.getLayer('Map 2 All Bus Stops')) {
+        var toggleableLayerIds = ['Map 2 Contours', 'Map 2 Hillshade', 'Map 2 All Bus Routes', 'Map 2 All Bus Stops'];
         for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
           if (!document.getElementById(id)) {
@@ -2612,6 +2622,8 @@
               map2.getSource('bus2_Route4Bus2').setData(bus2_Route4Bus2);
               bus2_Route4Bus2_counter = 0;
               bus2_Route4Bus2_animate(bus2_Route4Bus2_counter);
+              map2.setLayoutProperty('Map 2 Route 4 Main Stops', 'visibility', 'visible');
+              map2.setLayoutProperty('map2_Route4', 'visibility', 'visible');
             } else {
 
             }
@@ -2620,6 +2632,8 @@
               map2.getSource('bus2_Route4Bus1').setData(bus2_Route4Bus1);
               bus2_Route4Bus1_counter = 0;
               bus2_Route4Bus1_animate(bus2_Route4Bus1_counter);
+              map2.setLayoutProperty('Map 2 Route 4 Main Stops', 'visibility', 'visible');
+              map2.setLayoutProperty('map2_Route4', 'visibility', 'visible');
             } else {
 
             }
