@@ -59,16 +59,15 @@
       position: relative;
       top:80px;
       color: rgb(255, 255, 255);
-      font-family: 'workSansRegular';
+      font-family: 'Open Sans', sans-serif;
       font-size: 20px;
-      width: 70%;
+      float: left;
+      width: 100%;
       text-align: center;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     h2 {
-      top:80px;
+      top:60px;
       position: relative;
       color: #268bff;
       font-family: 'workSansBold';
@@ -89,10 +88,7 @@
 
 
     body {
-      margin: 0;
-      padding: 0;
       background-color:#202020;
-      padding-bottom: 100px;
     }
 
     #header{
@@ -107,7 +103,7 @@
       z-index: 200;
     }
 
-    .logo {
+    .HeaderLogo {
       position: absolute;
       padding: 5px;
       max-height: 40px;
@@ -116,94 +112,83 @@
       height: 48.3px;
     }
 
-    .charts{
-      top:80px;
-      bottom: 0;
-      width: 100%;
-      z-index: 10; 
+    .legend {
       position: relative;
-      padding: 20px;
-      height: 500px;
-      border-radius: 10px;
-      margin-bottom: 60px;
-      float: right;
-    }
-    .chart1{
-      bottom: 0;
-      width: 100%;
-      z-index: 10; 
-      position: relative;
-      margin-left: auto;
-      margin-right: auto;
-      top:30px;
+      width: 500px;
+      top: 100px;
     }
 
-    .chart2{
+    .piechart{
       top:80px;
       bottom: 0;
-      width: 100%;
+      width: 80%;
       z-index: 10; 
       position: relative;
       padding: 20px;
-      height: 500px;
       border-radius: 10px;
       margin-bottom: 60px;
-      float: right;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .container{
-      width: 60%;
+      width: 80%;
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 40px;
     }
-
-    .bio{
-      width: 100%;
-      height: auto;
-      position:relative;
-      margin-left:auto;
+    .iconContainer{
+      width: 80%;
+      margin-left: auto;
       margin-right: auto;
-      bottom: 10px;
-      top:50px;
+      padding-bottom: 60px;
     }
-    .icon{
-      width: 4%;
-      height: auto;
+    .icon1{
+      float: left;
+      padding-left: 4.5%;
+      width: 5%;
       position:relative;
-      left:48%;
-      top:80px;
-      position: relative;
+      padding-bottom:60px;
+    }
+    .icon2{
+      float: left;
+      padding-left: 5.65%;
+      width: 5%;
+      position:relative;
     }
   </style>
 </head>
 
 <body>
   <div id='header'>
-    <img class="logo" src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
+    <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo" class="HeaderLogo">
     <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
   </div>
   <!-- Nav bar -->
   <div class="topnav">
     <a href="Landing.html">Cities</a>
     <a href="SimulationResults.html">Simulation Results</a>
-    <a href="RecoveryTime.html">Recovery Time</a>
+    <a class="active" href="#a">Recovery Time</a>
     <a href="GHGEmissionsAnalysis.html">GHG Emissions</a>
     <a href="ElectricityCostEstimation.html">Electricity Cost</a>
-    <a class="active" href="#a">About</a>
+    <a href="About.html">About</a>
     <a href="Contact.html">Contact</a>
   </div>
-  <img class="bio" src="./images/About image.png" alt="CUTRIC About">
-
-  <h2>About Us</h2>
+  
+  <h2>Recovery Time</h2>
 
   <div class="container">
-    <h1>The Canadian Urban Transit Research & Innovation Consortium (CUTRIC) is a socially responsible non-profit organization that spearheads, designs, and launches technology and commercialization projects that advance next-generation zero-carbon mobility and transportation solutions across Canada. 
-      <p/>It also develops low-cost simulation tools that help transit agencies across Canada and the United States predict how their electric buses, hydrogen fuel cell buses and autonomous smart vehicles (for first kilometre/last kilometre solutions) will operate in real-time on roads and in service.
-    </h1>
-
+    <h1>Recovery Time For Saturday Vehicles, Failed vs. Success</h1>
+    <div id="piechart" class="piechart">
+    </div>
   </div>
-
+  
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/recovery-time-saturday.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#piechart"));
+    });
+  </script>
 
 </body>
 
