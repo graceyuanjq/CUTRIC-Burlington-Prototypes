@@ -118,7 +118,7 @@
       top: 100px;
     }
 
-    .piechart{
+    .chart{
       top:80px;
       bottom: 0;
       width: 80%;
@@ -129,6 +129,7 @@
       margin-bottom: 60px;
       margin-left: auto;
       margin-right: auto;
+      padding-bottom: 60px;
     }
 
     .container{
@@ -155,6 +156,13 @@
       width: 5%;
       position:relative;
     }
+    .legend {
+      position: relative;
+      margin-left: 10%;
+      width: 150px;
+      top: 100px;
+      padding-bottom: 30px;
+    }
   </style>
 </head>
 
@@ -167,7 +175,7 @@
   <div class="topnav">
     <a href="Landing.html">Cities</a>
     <a href="SimulationResults.html">Simulation Results</a>
-    <a class="active" href="#a">Recovery Time</a>
+    <a class="active" href="#a">Charging Results</a>
     <a href="GHGEmissionsAnalysis.html">GHG Emissions</a>
     <a href="ElectricityCostEstimation.html">Electricity Cost</a>
     <a href="About.html">About</a>
@@ -178,7 +186,7 @@
 
   <div class="container">
     <h1>Recovery Time For Saturday Vehicles, Failed vs. Success</h1>
-    <div id="piechart" class="piechart">
+    <div id="piechart" class="chart">
     </div>
   </div>
   
@@ -189,6 +197,23 @@
       if (name === "chart") return new Inspector(document.querySelector("#piechart"));
     });
   </script>
+
+<h2>Energy Consumption</h2>
+
+<div class="container">
+  <h1>Energy consumption of depot charging results and opportunity charging results.</h1>
+  <img src="./images/Energy Consumption Legend.svg" class="legend">
+  <div id="barchart" class="chart">
+  </div>
+</div>
+
+<script type="module">
+  import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+  import define from "https://api.observablehq.com/@gracey/energy-consumption.js?v=3";
+  new Runtime().module(define, name => {
+    if (name === "chart") return new Inspector(document.querySelector("#barchart"));
+  });
+</script>
 
 </body>
 
