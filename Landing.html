@@ -235,7 +235,7 @@
 </head>
 
 <body>
-
+    <!-- Add a sidebar for listing the cities -->
     <div id="sidebar" class="sidebar">
         <div class="listHeading">
             <h6>Cities</h6>
@@ -246,17 +246,15 @@
 
     <div class="centerDiv">
         <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
-        <!-- <img id="icon" src="Canada Icon.svg" alt="Canada icon">    -->
         <h1>CUTRIC Transit Fleet Electrification Analysis</h1>
         <h2>Select a city to get started</h2>
-        <!-- <button id="button1"><a href="SimulationResults.html">
-                <h3>Enter</h3>
-            </a></button> -->
+
     </div>
 
     <div id='map'></div>
 
     <script>
+        // Add a map with Mapbox APIs
         mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhY2V5dWFuIiwiYSI6ImNrcndzbGsxOTBkaXkycG1zc2E2NmpiYzMifQ.eFgEthHpFZF-yTfL2ApW6g';
         var map = new mapboxgl.Map({
             container: 'map',
@@ -270,9 +268,9 @@
             offset: [0, -24]
         });
         var nav = new mapboxgl.NavigationControl();
-
         map.addControl(nav, 'bottom-right');
 
+        // Add cities and coordinates
         const cities = {
             'type': 'FeatureCollection',
             'features': [
@@ -281,7 +279,7 @@
                     'properties': {
                         'description':
                             '<strong>Burlington, ON</strong>',
-                        'URL': "https://www.mapbox.com/"
+                        'url': 'SimulationResults.html'
                     },
                     'geometry': {
                         'type': 'Point',
@@ -548,6 +546,7 @@
         });
 
         map.on('load', function () {
+            //Add cities data to the map
             map.addSource('cities', {
                 'type': 'geojson',
                 'data': cities
@@ -574,6 +573,8 @@
                     curve: 1,
                 })
             });
+
+            // Add Enter button as a layer and import the button style from the mapbox style link
             map.addLayer({
                 'id': 'enter',
                 'type': 'symbol',
@@ -585,11 +586,13 @@
                     'icon-size': 0.6
                 }
             });
-
+            
+            //Enter each city's website when click on Enter, in this prototype only the Burlington link works
             map.on('click', 'enter', function (e) {
-                window.location.href= "SimulationResults.html"
+                window.location.href = e.features[0].properties.url  
             });
 
+            //When hover over the Enter button, display the name of the city
             map.on('mouseenter', 'enter', function (e) {
                 map.getCanvas().style.cursor = 'pointer';
                 const coordinates = e.features[0].geometry.coordinates.slice();
@@ -662,9 +665,7 @@
             }
         }
 
-        /**
-         * Add a listing for each city to the sidebar.
-         **/
+        // Add a listing for each city to the sidebar.
         function buildLocationList(cities) {
             for (const city of cities.features) {
                 /* Add a new listing section to the sidebar. */
@@ -677,7 +678,7 @@
 
                 /* Add the link to the individual listing created above. */
                 const link = listing.appendChild(document.createElement('a'));
-                link.href = '#';
+                link.href = "#";
                 link.className = 'title';
                 link.id = `link-${city.properties.id}`;
                 link.innerHTML = `${city.properties.description}`;
@@ -709,6 +710,7 @@
             }
         }
 
+        // Add fly to city function 
         function flyTocity(currentFeature) {
             map.flyTo({
                 center: currentFeature.geometry.coordinates,

@@ -13,33 +13,33 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
   <script
-  src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet"
-  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
-<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
   <style>
     @font-face {
       font-family: workSansBold;
       src: url(./fonts/WorkSans-Bold.ttf);
     }
-  
+
     @font-face {
       font-family: workSansExtraBold;
       src: url(./fonts/WorkSans-ExtraBold.ttf);
     }
-  
+
     @font-face {
       font-family: workSansMedium;
       src: url(./fonts/WorkSans-Medium.ttf);
     }
-  
+
     @font-face {
       font-family: workSansRegular;
       src: url(./fonts/WorkSans-Regular.ttf);
     }
-  
-  
+
+
     .topnav {
       overflow: hidden;
       position: absolute;
@@ -126,6 +126,7 @@
       font-family: sans-serif;
       padding: 5px;
     }
+
     #overlay {
       position: absolute;
       top: 300px;
@@ -133,7 +134,7 @@
       background: #efefef;
       padding: 10px;
       font-family: sans-serif;
-}
+    }
 
     #menu {
       position: absolute;
@@ -455,12 +456,13 @@
 </head>
 
 <body>
+  <!-- Nav bar header -->
   <div id='header'>
     <img src="./images/CUTRIC_Logo.png" alt="CUTRIC Logo">
     <h5>CUTRIC Transit Fleet Electrification Analysis - Burlington</h5>
   </div>
 
-  <!-- Nav bar -->
+  <!-- Nav bar links -->
   <div class="topnav">
     <a href="Landing.html">Cities</a>
     <a class="active" href="#a">Simulation Results</a>
@@ -471,9 +473,11 @@
     <a href="Contact.html">Contact</a>
   </div>
 
+  <!-- Bus types description boxes -->
   <div class='busType1'>
     <h4>Bus#1: Battery 400+ kWh, Weight ~15,000 kg
-      <br>Monthly charging utility demand:<br>548600 (heater), 638600 kWh(no heater)</h4>
+      <br>Monthly charging utility demand:<br>548600 (heater), 638600 kWh(no heater)
+    </h4>
   </div>
   <div class='busType2'>
     <h4>Bus#2: Battery 600+ kWh, Weight ~15,000 kg
@@ -485,6 +489,7 @@
   <div id='map'></div>
   <div id='map2'></div>
 
+  <!-- Drop down menu and graphs -->
   <div id=dropDownBar></div>
   <div class="dropDown">
     <select id="target">
@@ -496,6 +501,7 @@
       <select>
   </div>
 
+  <!-- Add graphs for No Diesel Heater, Depot Only Charging -->
   <div id="noDieselDepot" class='inv'>
     <div>
       <h2 style="background-color:#ffc34a;">Light Duty</h2>
@@ -525,7 +531,7 @@
       the same).</h3>
     <div id="figure5" class='chart1'></div>
   </div>
-
+  <!-- Embed the graphs from published Observable graphs, using javascript runtime -->
   <script type="module">
     import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
     import define from "https://api.observablehq.com/@gracey/grouped-bar-chart.js?v=3";
@@ -547,22 +553,22 @@
       if (name === "chart") return new Inspector(document.querySelector("#figure6C"));
     });
   </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure7B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure7C"));
+    });
+  </script>
 
-    <script type="module">
-      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
-      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
-      new Runtime().module(define, name => {
-        if (name === "chart") return new Inspector(document.querySelector("#figure7B"));
-      });
-    </script>
-    <script type="module">
-      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
-      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
-      new Runtime().module(define, name => {
-        if (name === "chart") return new Inspector(document.querySelector("#figure7C"));
-      });
-    </script>
-
+  <!-- Add graphs for Diesel Heater, Depot Only Charging -->
   <div id="dieselDepot" class='inv'>
     <div>
       <h2 style="background-color:#ffc34a;">Light Duty</h2>
@@ -622,29 +628,29 @@
       if (name === "chart") return new Inspector(document.querySelector("#figure9C"));
     });
   </script>
-    <script type="module">
-      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
-      import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
-      new Runtime().module(define, name => {
-        if (name === "chart") return new Inspector(document.querySelector("#figure10A"));
-      });
-    </script>
-    <script type="module">
-      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
-      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
-      new Runtime().module(define, name => {
-        if (name === "chart") return new Inspector(document.querySelector("#figure10B"));
-      });
-    </script>
-    <script type="module">
-      import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
-      import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
-      new Runtime().module(define, name => {
-        if (name === "chart") return new Inspector(document.querySelector("#figure10C"));
-      });
-    </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-bus-range-bar-line-chart-2.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure10A"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure10B"));
+    });
+  </script>
+  <script type="module">
+    import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@gracey/figure-9-b.js?v=3";
+    new Runtime().module(define, name => {
+      if (name === "chart") return new Inspector(document.querySelector("#figure10C"));
+    });
+  </script>
 
-
+  <!-- Add graphs for No Diesel Heater, Opportunity Charging -->
   <div id="noDieselOppor" class='inv'>
     <div>
       <h2 style="background-color:#ffc34a;">Light Duty</h2>
@@ -673,7 +679,6 @@
     <h3>Success rate of one-to-one replacement of diesel buses with opportunity charging BEBs without a diesel
       heater(summer and winter are the same).</h3>
     <div id="figure52" class='chart1'></div>
-
   </div>
   <script type="module">
     import { Runtime, Inspector } from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
@@ -725,6 +730,7 @@
     });
   </script>
 
+  <!-- Add graphs for Diesel Heater, Opportunity Charging -->
   <div id="dieselOppor" class='inv'>
     <div>
       <h2 style="background-color:#ffc34a;">Light Duty</h2>
@@ -807,6 +813,7 @@
     });
   </script>
 
+  <!-- Drop down menu script -->
   <script>
     document
       .getElementById('target')
@@ -822,6 +829,8 @@
         }
       });
   </script>
+
+  <!-- floating GHG & cost buttons -->
   <p><a href="GHGEmissionsAnalysis.html">
       <img src="./images/icon-GHG.svg" id="GHGButton1">
     </a></p>
@@ -836,10 +845,11 @@
     </a></p>
 
   <script>
-    
+    // Add two maps using Mapbox APIs
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ3JhY2V5dWFuIiwiYSI6ImNrcndzbGsxOTBkaXkycG1zc2E2NmpiYzMifQ.eFgEthHpFZF-yTfL2ApW6g';
     var map = new mapboxgl.Map({
       container: 'map',
+      //Use customized map style from Mapbox studio 
       style: 'mapbox://styles/graceyuan/ckrwsyqup04bq17mxaew6855r',
       center: [-79.809307, 43.340176],
       zoom: 10
@@ -850,12 +860,13 @@
       center: [-79.809307, 43.340176],
       zoom: 10
     });
-
+    //Add mapbox popup function
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false
     });
     var disable = false;
+    //Sync two maps to make them always centered around the same location
     map.on("move", function () {
       if (!disable) {
         var center = map.getCenter();
@@ -886,6 +897,7 @@
         disable = false;
       }
     })
+    // Add geocoder to both maps
     map.addControl(
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -898,6 +910,8 @@
         mapboxgl: mapboxgl
       })
     );
+
+    // Add potential charger locations data
     const chargerLocations = {
       'type': 'FeatureCollection',
       'features': [
@@ -1210,6 +1224,7 @@
     cities.features.forEach((city, i) => {
       city.properties.id = i;
     });
+    // Add Bus route 4 main stops with icons. Here we only prototyped one bus route for this prototype.
     const route4MainStops = {
       'type': 'FeatureCollection',
       'features': [
@@ -1322,6 +1337,7 @@
           }
         }]
     };
+    // Add Bus route 4 data, set the origin and destination locations, and then use Turf.js to animate the bus running on the route.
     const origin = [-79.85638880381256,
       43.31312161398645];
     const destination = [-79.76059469353302,
@@ -1473,7 +1489,7 @@
         }
       ]
     };
-
+    //Add the first bus on map 1, this bus visualize bus 4-1.
     const bus1_Route4Bus1 = {
       'type': 'FeatureCollection',
       'features': [
@@ -1491,6 +1507,7 @@
     };
     const bus1_Route4Bus1_lineDistance = turf.lineDistance(map1_Route4.features[0]);
     const bus1_Route4Bus1_arc = [];
+    //Use steps to set the speed of the bus
     const bus1_Route4Bus1_steps = 500;
     for (let i = 0; i < bus1_Route4Bus1_lineDistance; i += bus1_Route4Bus1_lineDistance / bus1_Route4Bus1_steps) {
       const bus1_Route4Bus1_segment = turf.along(map1_Route4.features[0], i);
@@ -1498,7 +1515,7 @@
     }
     map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus1_arc;
     let bus1_Route4Bus1_counter = 0;
-
+    //Add a second bus on map 1, this bus visualize bus 4-2.
     const bus1_Route4Bus2 = {
       'type': 'FeatureCollection',
       'features': [
@@ -1524,6 +1541,7 @@
     map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus2_arc;
     let bus1_Route4Bus2_counter = 0;
 
+    //Repeat the same steps for map 2
     const map2_Route4 = {
       'type': 'FeatureCollection',
       'features': [
@@ -1671,7 +1689,6 @@
         }
       ]
     };
-
     const bus2_Route4Bus1 = {
       'type': 'FeatureCollection',
       'features': [
@@ -1694,7 +1711,6 @@
     }
     map2_Route4.features[0].geometry.coordinates = bus2_Route4Bus1_arc;
     let bus2_Route4Bus1_counter = 0;
-
     const bus2_Route4Bus2 = {
       'type': 'FeatureCollection',
       'features': [
@@ -1719,14 +1735,14 @@
     }
     map2_Route4.features[0].geometry.coordinates = bus2_Route4Bus2_arc;
     let bus2_Route4Bus2_counter = 0;
-
+    //Add a border to the bus icon, set the colors to represent the battery usage
     var batteryColor = ['#00b81c', '#ffb700', '#ff0000']
 
-
-
+    //Customize map 1
     map.on('load', function () {
       var nav = new mapboxgl.NavigationControl();
       map.addControl(nav, 'bottom-right');
+      //Add four layers for toggle on and off on the map: countours, hillshade, all bus routes, and all bus stops
       map.addSource('Contours', {
         type: 'vector',
         url: 'mapbox://mapbox.mapbox-terrain-v2'
@@ -1793,6 +1809,7 @@
         }
       });
 
+      //Add route 4 on map 1
       map.addSource('map1_Route4', {
         'type': 'geojson',
         'data': map1_Route4
@@ -1826,6 +1843,7 @@
           'visibility': 'none'
         }
       });
+      //Show route 4 main stop info when hover over the stops
       map.on('mouseenter', 'Map 1 Route 4 Main Stops', function (e) {
         map.getCanvas().style.cursor = 'pointer';
         const coordinates = e.features[0].geometry.coordinates.slice();
@@ -1839,6 +1857,7 @@
         map.getCanvas().style.cursor = '';
         popup.remove();
       });
+      //Add charger locations on map 1 and create the hover function
       map.addSource('chargerLocations', {
         'type': 'geojson',
         'data': chargerLocations
@@ -1867,6 +1886,8 @@
         map.getCanvas().style.cursor = '';
         popup.remove();
       });
+
+      //Add route 4 and bus 4-1 to prepare for the animation
       map.addLayer({
         'id': 'map1_Route4',
         'source': 'map1_Route4',
@@ -1877,7 +1898,6 @@
         },
         "minzoom": 10
       });
-
       map.addSource('bus1_Route4Bus1', {
         'type': 'geojson',
         'data': bus1_Route4Bus1
@@ -1919,6 +1939,8 @@
         map.getCanvas().style.cursor = '';
         popup.remove();
       });
+
+      //Create bus 4-1 animation function
       function bus1_Route4Bus1_animate() {
         const bus1_Route4Bus1_start =
           map1_Route4.features[0].geometry.coordinates[
@@ -1948,7 +1970,7 @@
         }
       }
 
-
+      //Add bus 4-2 to the map
       map.addSource('bus1_Route4Bus2', {
         'type': 'geojson',
         'data': bus1_Route4Bus2
@@ -1990,6 +2012,8 @@
         map.getCanvas().style.cursor = '';
         popup.remove();
       });
+
+      //Create bus 4-2 animation function
       function bus1_Route4Bus2_animate() {
         const start =
           map1_Route4.features[0].geometry.coordinates[
@@ -2019,6 +2043,7 @@
         }
       }
 
+      //Add the toggle layer function for the four layers
       if (map.getLayer('Map 1 Contours') && map.getLayer('Map 1 Hillshade') && map.getLayer('Map 1 All Bus Routes') && map.getLayer('Map 1 All Bus Stops')) {
         var toggleableLayerIds = ['Map 1 Contours', 'Map 1 Hillshade', 'Map 1 All Bus Routes', 'Map 1 All Bus Stops'];
         for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -2064,9 +2089,7 @@
         }
       }
 
-
-      var colors = ["#ffc34a", "#ff894a", "#ff4a4a"];
-
+      // Create a seperate bar graph associated with the bus 4-1 and bus 4-2 animation functions
       // set the dimensions and margins of the graph
       var margin = { top: 30, right: 60, bottom: 70, left: 30 },
         width = innerWidth - margin.left - margin.right,
@@ -2082,7 +2105,7 @@
           "translate(" + margin.left + "," + margin.top + ")");
 
       // Parse the Data
-      d3.csv("https://raw.githubusercontent.com/graceyuanjq/CUTRIC_BURLINGTON/main/Figure%209%20A.csv", function (data) {
+      d3.csv("https://raw.githubusercontent.com/graceyuanjq/CUTRIC-Burlington-Prototypes/main/data/Figure%209%20A.csv", function (data) {
 
         // X axis
         var x = d3.scaleBand()
@@ -2112,7 +2135,7 @@
           .selectAll("text")
           .attr("stroke", "#ffffff");
 
-        // Bars
+        // Add bars
         svg.selectAll("rect")
           .data(data)
           .enter()
@@ -2122,6 +2145,7 @@
           .attr("width", x.bandwidth())
           .attr("height", function (d) { return height - y(d.total); })
           .attr("fill", "#94c8ff")
+          //Add the on click animation function for bus 4-1 and bus 4-2
           .on("click", function (d) {
             d3.select(this).attr("stroke", "#ffffff").attr("stroke-width", 2)
             console.log(d.bus)
@@ -2147,6 +2171,8 @@
             }
           })
 
+        // Add three paths for light, medium and heavy
+        var colors = ["#ffc34a", "#ff894a", "#ff4a4a"];
         svg.append("path")
           .datum(data)
           .attr("d", d3.line()
@@ -2156,8 +2182,6 @@
           .attr("stroke", colors[0])
           .attr("stroke-miterlimit", 1)
           .attr("stroke-width", 3)
-
-
         svg.append("path")
           .datum(data)
           .attr("d", d3.line()
@@ -2167,7 +2191,6 @@
           .attr("stroke", colors[1])
           .attr("stroke-miterlimit", 1)
           .attr("stroke-width", 3)
-
         svg.append("path")
           .datum(data)
           .attr("d", d3.line()
@@ -2177,12 +2200,10 @@
           .attr("stroke", colors[2])
           .attr("stroke-miterlimit", 1)
           .attr("stroke-width", 3)
-
       });
-
     });
 
-
+    //Repeat the same steps for map 2
     map2.on('load', function () {
       var nav = new mapboxgl.NavigationControl();
       map2.addControl(nav, 'bottom-right');
@@ -2284,7 +2305,7 @@
         'layout': {
           'icon-image': '{icon}',
           'icon-allow-overlap': true,
-          'visibility':'none',
+          'visibility': 'none',
         }
       });
       map2.on('mouseenter', 'Map 2 Route 4 Main Stops', function (e) {
@@ -2468,7 +2489,7 @@
         }
       }
 
-      if (map2.getLayer('Map 2 Contours') &&  map2.getLayer('Map 2 Hillshade') && map2.getLayer('Map 2 All Bus Routes') && map2.getLayer('Map 2 All Bus Stops')) {
+      if (map2.getLayer('Map 2 Contours') && map2.getLayer('Map 2 Hillshade') && map2.getLayer('Map 2 All Bus Routes') && map2.getLayer('Map 2 All Bus Stops')) {
         var toggleableLayerIds = ['Map 2 Contours', 'Map 2 Hillshade', 'Map 2 All Bus Routes', 'Map 2 All Bus Stops'];
         for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
@@ -2624,103 +2645,6 @@
 
       });
     });
-
-    function addMarkers() {
-      /* For each feature in the GeoJSON object above: */
-      for (const marker of cities.features) {
-        /* Create a div element for the marker. */
-        const el = document.createElement('div');
-        /* Assign a unique `id` to the marker. */
-        el.id = `marker-${marker.properties.id}`;
-        /* Assign the `marker` class to each marker for styling. */
-        el.className = 'marker';
-
-        /**
-         * Create a marker using the div element
-         * defined above and add it to the map.
-         **/
-        new mapboxgl.Marker(el, { offset: [0, -23] })
-          .setLngLat(marker.geometry.coordinates)
-          .addTo(map);
-
-        /**
-         * Listen to the element and when it is clicked, do three things:
-         * 1. Fly to the point
-         * 2. Close all other popups and display popup for clicked city
-         * 3. Highlight listing in sidebar (and remove highlight for all other listings)
-         **/
-        el.addEventListener('click', (e) => {
-          /* Fly to the point */
-          flyTocity(marker);
-          /* Close all other popups and display popup for clicked city */
-          createPopUp(marker);
-          /* Highlight listing in sidebar */
-          const activeItem = document.getElementsByClassName('active');
-          e.stopPropagation();
-          if (activeItem[0]) {
-            activeItem[0].classList.remove('active');
-          }
-          const listing = document.getElementById(
-            `listing-${marker.properties.id}`
-          );
-          listing.classList.add('active');
-        });
-      }
-    }
-
-    /**
-     * Add a listing for each city to the sidebar.
-     **/
-    function buildLocationList(cities) {
-      for (const city of cities.features) {
-        /* Add a new listing section to the sidebar. */
-        const listings = document.getElementById('listings');
-        const listing = listings.appendChild(document.createElement('div'));
-        /* Assign a unique `id` to the listing. */
-        listing.id = `listing-${city.properties.id}`;
-        /* Assign the `item` class to each listing for styling. */
-        listing.className = 'item';
-
-        /* Add the link to the individual listing created above. */
-        const link = listing.appendChild(document.createElement('a'));
-        link.href = '#';
-        link.className = 'title';
-        link.id = `link-${city.properties.id}`;
-        link.innerHTML = `${city.properties.description}`;
-
-        /* Add details to the individual listing. */
-        const details = listing.appendChild(document.createElement('div'));
-        // details.innerHTML = `${city.properties.city}`;
-
-        /**
-         * Listen to the element and when it is clicked, do four things:
-         * 1. Update the `currentFeature` to the city associated with the clicked link
-         * 2. Fly to the point
-         * 3. Close all other popups and display popup for clicked city
-         * 4. Highlight listing in sidebar (and remove highlight for all other listings)
-         **/
-        link.addEventListener('click', function () {
-          for (const feature of cities.features) {
-            if (this.id === `link-${feature.properties.id}`) {
-              flyTocity(feature);
-              createPopUp(feature);
-            }
-          }
-          const activeItem = document.getElementsByClassName('active');
-          if (activeItem[0]) {
-            activeItem[0].classList.remove('active');
-          }
-          this.parentNode.classList.add('active');
-        });
-      }
-    }
-
-    function flyTocity(currentFeature) {
-      map.flyTo({
-        center: currentFeature.geometry.coordinates,
-        zoom: 11.5
-      });
-    }
 
   </script>
 
