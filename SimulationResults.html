@@ -9,14 +9,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
-  <script src="https://d3js.org/d3.v4.js"></script>
   <script
     src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
   <link rel="stylesheet"
     href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
-  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
   <style>
     @font-face {
@@ -866,7 +867,8 @@
       closeOnClick: false
     });
     var disable = false;
-    //Sync two maps to make them always centered around the same location
+    
+    //Sync the movement between two maps
     map.on("move", function () {
       if (!disable) {
         var center = map.getCenter();
@@ -897,6 +899,7 @@
         disable = false;
       }
     })
+    
     // Add geocoder to both maps
     map.addControl(
       new MapboxGeocoder({
@@ -1224,6 +1227,7 @@
     cities.features.forEach((city, i) => {
       city.properties.id = i;
     });
+    
     // Add Bus route 4 main stops with icons. Here we only prototyped one bus route for this prototype.
     const route4MainStops = {
       'type': 'FeatureCollection',
@@ -1337,7 +1341,8 @@
           }
         }]
     };
-    // Add Bus route 4 data, set the origin and destination locations, and then use Turf.js to animate the bus running on the route.
+    // Add Bus route 4 data, set the origin and destination locations, and then use Turf.js to 
+    //animate the bus running on the route.
     const origin = [-79.85638880381256,
       43.31312161398645];
     const destination = [-79.76059469353302,
@@ -1515,6 +1520,7 @@
     }
     map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus1_arc;
     let bus1_Route4Bus1_counter = 0;
+
     //Add a second bus on map 1, this bus visualize bus 4-2.
     const bus1_Route4Bus2 = {
       'type': 'FeatureCollection',
@@ -1540,7 +1546,6 @@
     }
     map1_Route4.features[0].geometry.coordinates = bus1_Route4Bus2_arc;
     let bus1_Route4Bus2_counter = 0;
-
     //Repeat the same steps for map 2
     const map2_Route4 = {
       'type': 'FeatureCollection',
@@ -2203,7 +2208,7 @@
       });
     });
 
-    //Repeat the same steps for map 2
+    //Repeat the same functions for map 2
     map2.on('load', function () {
       var nav = new mapboxgl.NavigationControl();
       map2.addControl(nav, 'bottom-right');
