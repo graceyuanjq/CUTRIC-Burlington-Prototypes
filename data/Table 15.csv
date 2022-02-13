@@ -1,4 +1,4 @@
-State,Light Duty Bus #1,Light Duty Bus #2,Medium Duty Bus #1,Medium Duty Bus #2,Heavy Duty Bus #1,Heavy Duty Bus #2
-Electricity Usage (kWh/month),2704659,4499890,2159981,3853788,10604510,8819342
-Electricity Usage (kWh/year),2027307,3277946,1420518,2454721,7017731,5656528
-GHG emissions(tonnes/year),1208495,2141490,1058031,1999120,5355235,5120254
+State,Bus #1,Bus #2
+Light Duty,119,114
+Medium Duty,153,148
+Heavy Duty,234,227
