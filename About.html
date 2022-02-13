@@ -12,17 +12,17 @@
       font-family: workSansBold;
       src: url(./fonts/WorkSans-Bold.ttf);
     }
-  
+
     @font-face {
       font-family: workSansExtraBold;
       src: url(./fonts/WorkSans-ExtraBold.ttf);
     }
-  
+
     @font-face {
       font-family: workSansMedium;
       src: url(./fonts/WorkSans-Medium.ttf);
     }
-  
+
     @font-face {
       font-family: workSansRegular;
       src: url(./fonts/WorkSans-Regular.ttf);
@@ -32,7 +32,7 @@
       overflow: hidden;
       position: fixed;
       right: 18px;
-      top:0px;
+      top: 0px;
       z-index: 200;
     }
 
@@ -57,7 +57,7 @@
 
     h1 {
       position: relative;
-      top:80px;
+      top: 80px;
       color: rgb(255, 255, 255);
       font-family: 'workSansRegular';
       font-size: 20px;
@@ -68,7 +68,7 @@
     }
 
     h2 {
-      top:80px;
+      top: 80px;
       position: relative;
       color: #268bff;
       font-family: 'workSansBold';
@@ -91,12 +91,12 @@
     body {
       margin: 0;
       padding: 0;
-      background-color:#202020;
+      background-color: #202020;
       padding-bottom: 100px;
     }
 
-    #header{
-      position:fixed;
+    #header {
+      position: fixed;
       background-color: white;
       height: 50px;
       width: 100%;
@@ -116,11 +116,11 @@
       height: 48.3px;
     }
 
-    .charts{
-      top:80px;
+    .charts {
+      top: 80px;
       bottom: 0;
       width: 100%;
-      z-index: 10; 
+      z-index: 10;
       position: relative;
       padding: 20px;
       height: 500px;
@@ -128,21 +128,22 @@
       margin-bottom: 60px;
       float: right;
     }
-    .chart1{
+
+    .chart1 {
       bottom: 0;
       width: 100%;
-      z-index: 10; 
+      z-index: 10;
       position: relative;
       margin-left: auto;
       margin-right: auto;
-      top:30px;
+      top: 30px;
     }
 
-    .chart2{
-      top:80px;
+    .chart2 {
+      top: 80px;
       bottom: 0;
       width: 100%;
-      z-index: 10; 
+      z-index: 10;
       position: relative;
       padding: 20px;
       height: 500px;
@@ -151,28 +152,37 @@
       float: right;
     }
 
-    .container{
+    .container {
       width: 60%;
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 40px;
     }
 
-    .bio{
+    #background {
+      background-color: #2b2b2b;
+      position: absolute;
+      width: 100%;
+      height: 200%;
+      z-index: -10;
+    }
+
+    .bio {
       width: 100%;
       height: auto;
-      position:relative;
-      margin-left:auto;
+      position: relative;
+      margin-left: auto;
       margin-right: auto;
       bottom: 10px;
-      top:50px;
+      top: 50px;
     }
-    .icon{
+
+    .icon {
       width: 4%;
       height: auto;
-      position:relative;
-      left:48%;
-      top:80px;
+      position: relative;
+      left: 48%;
+      top: 80px;
       position: relative;
     }
   </style>
@@ -198,13 +208,17 @@
   <h2>About Us</h2>
 
   <div class="container">
-    <h1>The Canadian Urban Transit Research & Innovation Consortium (CUTRIC) is a socially responsible non-profit organization that spearheads, designs, and launches technology and commercialization projects that advance next-generation zero-carbon mobility and transportation solutions across Canada. 
-      <p/>It also develops low-cost simulation tools that help transit agencies across Canada and the United States predict how their electric buses, hydrogen fuel cell buses and autonomous smart vehicles (for first kilometre/last kilometre solutions) will operate in real-time on roads and in service.
+    <h1>The Canadian Urban Transit Research & Innovation Consortium (CUTRIC) is a socially responsible non-profit
+      organization that spearheads, designs, and launches technology and commercialization projects that advance
+      next-generation zero-carbon mobility and transportation solutions across Canada.
+      <p />It also develops low-cost simulation tools that help transit agencies across Canada and the United States
+      predict how their electric buses, hydrogen fuel cell buses and autonomous smart vehicles (for first kilometre/last
+      kilometre solutions) will operate in real-time on roads and in service.
     </h1>
 
   </div>
 
-
+  <div id="background"></div>
 </body>
 
 </html>
