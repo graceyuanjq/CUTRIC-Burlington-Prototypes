@@ -52,11 +52,25 @@
       float: left;
       color: #6e6e6e;
       text-align: center;
-      padding: 16px 18px;
+      padding: 16px 14px;
       text-decoration: none;
       font-size: 14px;
       font-family: 'workSansRegular';
     }
+
+    @media only screen and (max-width: 1270px) {
+
+        .topnav a {
+        float: left;
+        color: #6e6e6e;
+        text-align: center;
+        padding: 19px 10px;
+        text-decoration: none;
+        font-size: 12px;
+        font-family: 'workSansRegular';
+      }
+    }
+
 
     .topnav a:hover {
       color: rgb(65, 102, 202);
@@ -64,7 +78,7 @@
 
     .topnav a.active {
       color: rgb(59, 78, 163);
-      font-weight: bold;
+      font-family: 'workSansBold';
     }
 
     /* Graph main title */
@@ -106,22 +120,31 @@
       font-family: sans-serif;
       font-size: 12px;
       z-index: 100;
-      line-height: 1.2;
-      padding: 5px;
     }
 
     /* Page title */
+
     h5 {
       color: rgb(0, 0, 0);
       font-family: 'workSansBold';
-      font-size: 18px;
+      font-size: 16px;
       left: 50px;
       position: relative;
-      bottom: 5px;
+      bottom: 2px;
       line-height: 0;
     }
-
-    h6 {
+    @media only screen and (max-width: 1270px) {
+      h5 {
+      color: rgb(0, 0, 0);
+      font-family: 'workSansBold';
+      font-size: 14px;
+      left: 50px;
+      position: relative;
+      top:3px;
+      line-height: 0;
+    }
+    }
+      h6 {
       font-size: 18px;
       margin: 0;
       font-family: sans-serif;
@@ -341,8 +364,9 @@
       top: 50px;
       left: 0;
       z-index: 100;
-      background-color: rgba(255, 255, 255, 0.8);
-      opacity: 70;
+      background-color: rgba(140, 194, 255, 0.8);
+      opacity: 40;
+      padding: 5px;
     }
 
     .busType2 {
@@ -350,9 +374,21 @@
       top: 50px;
       left: 50%;
       z-index: 100;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(140, 194, 255, 0.8);
+      opacity: 40;
+      padding: 5px;    }
+    #more {display: none;}
+    #moreBtn{
+      background-color: #ffffff52;
+      color: #2b2b2b;
+      border-style:none;
     }
-
+    #more2 {display: none;}
+    #moreBtn2{
+      background-color: #ffffff52;
+      color: #2b2b2b;
+      border-style:none;
+    }
     #header {
       position: absolute;
       background-color: white;
@@ -476,17 +512,54 @@
     <a href="Contact.html">Contact</a>
   </div>
 
-  <!-- Bus types description boxes -->
+  <!-- Bus types description boxes and More buttons -->
   <div class='busType1'>
-    <h4>Bus#1: Battery 400+ kWh, Weight ~15,000 kg
-      <br>Monthly charging utility demand:<br>548600 (heater), 638600 kWh(no heater)
+    <h4>Bus#1<span id="dots">...</span><span id="more">: Battery 400+ kWh, Weight ~15,000 kg
+      <br>Monthly charging utility demand:<br>548600 (heater), 638600 kWh(no heater)</span></p>
     </h4>
+    <button onclick="more()" id="moreBtn">More</button>
   </div>
   <div class='busType2'>
-    <h4>Bus#2: Battery 600+ kWh, Weight ~15,000 kg
-      <br>Monthly charging utility demand:<br>527300 (heater), 616700 kWh(no heater)
+    <h4>Bus#2<span id="dots2">...</span><span id="more2">: Battery 600+ kWh, Weight ~15,000 kg
+      <br>Monthly charging utility demand:<br>527300 (heater), 616700 kWh(no heater)</span></p>
     </h4>
+    <button onclick="more2()" id="moreBtn2">More</button>
   </div>
+<script>
+function more() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("moreBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "More"; 
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Less"; 
+    moreText.style.display = "inline";
+  }
+}
+</script>
+<script>
+  function more2() {
+    var dots2 = document.getElementById("dots2");
+    var moreText2 = document.getElementById("more2");
+    var btnText2 = document.getElementById("moreBtn2");
+  
+    if (dots2.style.display === "none") {
+      dots2.style.display = "inline";
+      btnText2.innerHTML = "More"; 
+      moreText2.style.display = "none";
+    } else {
+      dots2.style.display = "none";
+      btnText2.innerHTML = "Less"; 
+      moreText2.style.display = "inline";
+    }
+  }
+  </script>
+
   <nav id="menu" class='menu'></nav>
   <nav id="menu2" class='menu2'></nav>
   <div id='map'></div>
